@@ -34,8 +34,7 @@ export async function POST(req: Request) {
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
-  // (save_count denorm bump is deferred — needs a small trigger or RPC migration.
-  // Not critical for the MVP; the card's save state comes from saved_listings directly.)
+  // listings.save_count is maintained by trg_listings_save_count on the DB side.
 
   return NextResponse.json({ saved: true });
 }
