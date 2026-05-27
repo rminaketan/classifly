@@ -6,6 +6,7 @@ import { SetupScreen } from '@/components/SetupScreen';
 import { PhotoUploader } from '@/components/PhotoUploader';
 import { SaveButton } from '@/components/SaveButton';
 import { BoostButton } from '@/components/BoostButton';
+import { ReviewSection } from '@/components/ReviewSection';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { isConfigured } from '@/lib/env';
 import { cdnImage } from '@/lib/r2';
@@ -183,6 +184,12 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
                 </p>
               </div>
             )}
+
+            <ReviewSection
+              listingId={listing.id}
+              sellerId={listing.seller_id}
+              currentUserId={currentUser?.id}
+            />
           </div>
 
           {/* Right rail */}

@@ -5,7 +5,8 @@ import { SetupScreen } from '@/components/SetupScreen';
 import { isConfigured } from '@/lib/env';
 import { requireUser } from '@/lib/auth';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
-import { BadgeCheck } from 'lucide-react';
+import { BadgeCheck, Star } from 'lucide-react';
+import { timeAgo } from '@classifly/shared';
 
 export const metadata = { title: 'My profile' };
 
@@ -15,7 +16,7 @@ export default async function ProfilePage() {
   const user = await requireUser('/profile');
   const supabase = createSupabaseServerClient();
 
-  const [{ data: profile }, { data: listings }] = await Promise.all([
+  const [{ data: profile }, { data: listings }, { data: reviews }] = await Promise.all([
     supabase.from('profiles').select('*').eq('id', user.id).single(),
     supabase
       .from('listings')
@@ -26,6 +27,14 @@ export default async function ProfilePage() {
       )
       .eq('seller_id', user.id)
       .order('created_at', { ascending: false }),
+    supabase
+      .from('reviews')
+      .select(
+        'id, rating, body, created_at, listing_id, reviewer:profiles!reviews_reviewer_id_fkey(display_name), listing:listings(title)',
+      )
+      .eq('reviewee_id', user.id)
+      .order('created_at', { ascending: false })
+      .limit(10),
   ]);
 
   const flat = (listings ?? []).map((row: any) => ({
@@ -94,6 +103,41 @@ export default async function ProfilePage() {
                 <Link href="/sell" className="btn-accent mt-4 inline-flex">
                   Post an ad
                 </Link>
+              </div>
+            )}
+
+            {(reviews?.length ?? 0) > 0 && (
+              <div className="card mt-6 p-5">
+                <h2 className="mb-3 text-lg font-bold">Your reviews</h2>
+                <ul className="space-y-3">
+                  {(reviews ?? []).map((r: any) => (
+                    <li key={r.id} className="border-b border-neutral-100 pb-3 last:border-0 last:pb-0">
+                      <div className="flex items-center gap-2">
+                        <div className="flex">
+                          {[1, 2, 3, 4, 5].map((n) => (
+                            <Star
+                              key={n}
+                              className={`h-4 w-4 ${n <= r.rating ? 'fill-yellow-400 text-yellow-400' : 'text-neutral-200'}`}
+                            />
+                          ))}
+                        </div>
+                        <span className="text-sm font-semibold">
+                          {r.reviewer?.display_name ?? 'Anonymous'}
+                        </span>
+                        <span className="text-xs text-neutral-500">· {timeAgo(r.created_at)}</span>
+                      </div>
+                      {r.listing && (
+                        <Link
+                          href={`/listings/${r.listing_id}`}
+                          className="mt-1 block text-xs text-neutral-500 hover:underline"
+                        >
+                          on "{r.listing.title}"
+                        </Link>
+                      )}
+                      {r.body && <p className="mt-1 text-sm text-neutral-800">{r.body}</p>}
+                    </li>
+                  ))}
+                </ul>
               </div>
             )}
           </section>

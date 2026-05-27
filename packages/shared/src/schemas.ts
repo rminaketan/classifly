@@ -112,6 +112,23 @@ export const startConversationSchema = z.object({
 });
 export type StartConversationInput = z.infer<typeof startConversationSchema>;
 
+// ---------- Reviews ----------
+export const ratingSchema = z.number().int().min(1).max(5);
+
+export const createReviewSchema = z.object({
+  listing_id: uuid,
+  reviewee_id: uuid,
+  rating: ratingSchema,
+  body: z.string().max(2000).optional(),
+});
+export type CreateReviewInput = z.infer<typeof createReviewSchema>;
+
+export const replyToReviewSchema = z.object({
+  review_id: uuid,
+  reply_body: z.string().min(1).max(2000),
+});
+export type ReplyToReviewInput = z.infer<typeof replyToReviewSchema>;
+
 // ---------- Boost / featured-listing payments ----------
 export const boostTierIdSchema = z.enum(['b7', 'b30']);
 
