@@ -46,6 +46,20 @@ export async function createReview(input: CreateReviewInput) {
     throw new Error('Reviewee does not match listing seller');
   }
 
+  // Proof-of-contact gate: the reviewer must have an open conversation
+  // with the seller about THIS listing. Cheap to enforce here because we
+  // have the (listing_id, buyer_id, seller_id) unique tuple to look up.
+  const { data: convo } = await supabase
+    .from('conversations')
+    .select('id')
+    .eq('listing_id', parsed.listing_id)
+    .eq('buyer_id', user.id)
+    .eq('seller_id', parsed.reviewee_id)
+    .maybeSingle();
+  if (!convo) {
+    throw new Error('Chat with the seller about this listing before reviewing');
+  }
+
   const { error } = await supabase.from('reviews').insert({
     reviewer_id: user.id,
     reviewee_id: parsed.reviewee_id,

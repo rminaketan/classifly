@@ -6,7 +6,8 @@
  * - The seller sees a Reply button on each review (handled per-row in
  *   ReplyForm).
  */
-import { Star } from 'lucide-react';
+import Link from 'next/link';
+import { Star, MessageCircle } from 'lucide-react';
 import { timeAgo } from '@classifly/shared';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { ReviewForm } from './ReviewForm';
@@ -47,7 +48,7 @@ function Stars({ value, size = 'sm' }: { value: number; size?: 'sm' | 'md' }) {
 export async function ReviewSection({ listingId, sellerId, currentUserId }: Props) {
   const supabase = createSupabaseServerClient();
 
-  const { data: reviews } = await supabase
+  const reviewsPromise = supabase
     .from('reviews')
     .select(
       'id, rating, body, reply_body, reply_at, created_at, reviewer_id, reviewee_id, reviewer:profiles!reviews_reviewer_id_fkey(display_name)',
@@ -56,23 +57,61 @@ export async function ReviewSection({ listingId, sellerId, currentUserId }: Prop
     .order('created_at', { ascending: false })
     .limit(20);
 
+  // Proof-of-contact check: only run for an authed non-owner viewer.
+  const isOwner = currentUserId === sellerId;
+  const convoPromise =
+    currentUserId && !isOwner
+      ? supabase
+          .from('conversations')
+          .select('id')
+          .eq('listing_id', listingId)
+          .eq('buyer_id', currentUserId)
+          .eq('seller_id', sellerId)
+          .maybeSingle()
+      : Promise.resolve({ data: null });
+
+  const [{ data: reviews }, { data: convo }] = await Promise.all([
+    reviewsPromise,
+    convoPromise,
+  ]);
+
   const rows = (reviews ?? []) as unknown as ReviewRow[];
 
-  const isOwner = currentUserId === sellerId;
   const hasReviewed = currentUserId
     ? rows.some((r) => r.reviewer_id === currentUserId)
     : false;
-  const canReview = !!currentUserId && !isOwner && !hasReviewed;
+  const eligibleToReview = !!currentUserId && !isOwner && !hasReviewed;
+  const hasChatted = !!convo;
+  const canReview = eligibleToReview && hasChatted;
 
   return (
     <div className="card p-5">
       <h2 className="mb-4 text-lg font-bold">Reviews</h2>
 
-      {canReview && (
+      {canReview ? (
         <div className="mb-5 rounded-md border border-neutral-200 bg-neutral-50 p-3">
           <div className="mb-2 text-sm font-semibold">Leave a review</div>
           <ReviewForm listingId={listingId} revieweeId={sellerId} />
         </div>
+      ) : (
+        eligibleToReview && (
+          <div className="mb-5 flex items-start gap-2 rounded-md border border-neutral-200 bg-neutral-50 p-3 text-sm text-neutral-700">
+            <MessageCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-primary" />
+            <div className="flex-1">
+              <div className="font-semibold">Chat with the seller first</div>
+              <p className="mt-0.5 text-xs text-neutral-600">
+                Reviews are limited to buyers who have contacted the seller about
+                this listing.
+              </p>
+              <Link
+                href={`/chat?listing=${listingId}`}
+                className="mt-2 inline-block text-xs font-semibold text-primary hover:underline"
+              >
+                Open chat →
+              </Link>
+            </div>
+          </div>
+        )
       )}
 
       {rows.length === 0 ? (
