@@ -112,6 +112,23 @@ export const startConversationSchema = z.object({
 });
 export type StartConversationInput = z.infer<typeof startConversationSchema>;
 
+// ---------- Saved searches ----------
+export const savedSearchFiltersSchema = z.object({
+  vertical: verticalSchema.optional(),
+  category_id: uuid.optional(),
+  city_id: uuid.optional(),
+  min_price: z.number().min(0).optional(),
+  max_price: z.number().min(0).optional(),
+});
+export type SavedSearchFilters = z.infer<typeof savedSearchFiltersSchema>;
+
+export const createSavedSearchSchema = z.object({
+  name: z.string().min(2).max(80),
+  query_text: z.string().max(200).optional(),
+  filters: savedSearchFiltersSchema.default({}),
+});
+export type CreateSavedSearchInput = z.infer<typeof createSavedSearchSchema>;
+
 // ---------- Reviews ----------
 export const ratingSchema = z.number().int().min(1).max(5);
 

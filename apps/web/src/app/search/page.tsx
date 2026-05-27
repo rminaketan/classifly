@@ -1,11 +1,12 @@
 import { Header } from '@/components/Header';
 import { ListingCard } from '@/components/ListingCard';
 import { SetupScreen } from '@/components/SetupScreen';
+import { SaveSearchButton } from '@/components/SaveSearchButton';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { isConfigured } from '@/lib/env';
 import { getCurrentUser } from '@/lib/auth';
 import { getSavedSet } from '@/lib/saved';
-import { searchListingsSchema } from '@classifly/shared';
+import { searchListingsSchema, type SavedSearchFilters } from '@classifly/shared';
 
 export const metadata = { title: 'Search' };
 
@@ -107,6 +108,22 @@ export default async function SearchPage({
             <button className="btn-primary">Search</button>
           </form>
         </div>
+
+        {currentUser && (q || vertical || category_id || min_price != null || max_price != null) && (
+          <div className="mb-5">
+            <SaveSearchButton
+              queryText={q ?? null}
+              filters={
+                {
+                  vertical: vertical ?? undefined,
+                  category_id: category_id ?? undefined,
+                  min_price: min_price ?? undefined,
+                  max_price: max_price ?? undefined,
+                } satisfies SavedSearchFilters
+              }
+            />
+          </div>
+        )}
 
         {flat.length > 0 ? (
           <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4">

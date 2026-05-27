@@ -73,7 +73,8 @@ export default async function ProfilePage() {
 
             <div className="card mt-4 p-2">
               <NavItem href="/profile" active>My listings</NavItem>
-              <NavItem href="/profile/saved">Saved</NavItem>
+              <NavItem href="/profile/saved">Saved listings</NavItem>
+              <NavItem href="/profile/saved-searches">Saved searches</NavItem>
               <NavItem href="/chat">Chats</NavItem>
               <NavItem href="/profile/wallet">Wallet</NavItem>
               <NavItem href="/profile/settings">Settings</NavItem>
