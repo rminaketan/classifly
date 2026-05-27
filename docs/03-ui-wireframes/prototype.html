@@ -1,0 +1,1778 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Classifly.in — Interactive Prototype</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<style>
+  :root{
+    --primary:#1F3A5F; --primary-700:#172E4B; --primary-50:#F0F4F9;
+    --accent:#FF6B35; --accent-700:#C24016; --accent-50:#FFF4EF;
+    --success:#16A34A; --warning:#F59E0B; --danger:#DC2626; --verified:#0EA5E9;
+    --n50:#F8FAFC; --n100:#F1F5F9; --n200:#E2E8F0; --n300:#CBD5E1;
+    --n400:#94A3B8; --n500:#64748B; --n600:#475569; --n700:#334155; --n800:#1E293B; --n900:#0F172A;
+  }
+  html,body{font-family:'Inter',system-ui,sans-serif;background:#EEF1F6;color:var(--n800);}
+  .hindi{font-family:'Noto Sans Devanagari','Inter',sans-serif;}
+  .btn{display:inline-flex;align-items:center;gap:6px;font-weight:600;border-radius:10px;padding:10px 16px;font-size:14px;line-height:1;transition:all 160ms;cursor:pointer;border:0;}
+  .btn-primary{background:var(--primary);color:#fff;}
+  .btn-primary:hover{background:var(--primary-700);}
+  .btn-accent{background:var(--accent);color:#fff;}
+  .btn-accent:hover{background:var(--accent-700);}
+  .btn-secondary{background:#fff;color:var(--primary);border:1px solid var(--n200);}
+  .btn-secondary:hover{background:var(--n50);}
+  .btn-ghost{background:transparent;color:var(--primary);}
+  .btn-ghost:hover{background:var(--n100);}
+  .btn-sm{padding:6px 12px;font-size:13px;border-radius:8px;}
+  .card{background:#fff;border:1px solid var(--n200);border-radius:12px;}
+  .chip{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;font-size:12px;font-weight:500;border-radius:999px;background:var(--n100);color:var(--n700);}
+  .chip-active{background:var(--primary);color:#fff;}
+  .badge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;font-size:11px;font-weight:600;border-radius:6px;}
+  .badge-verified{background:#E0F2FE;color:#0369A1;}
+  .badge-featured{background:#FFE0D2;color:#C24016;}
+  .badge-kyc{background:#DCFCE7;color:#15803D;}
+  .badge-urgent{background:#FEE2E2;color:#B91C1C;}
+  .input{width:100%;padding:10px 12px;border:1px solid var(--n200);border-radius:10px;background:#fff;font-size:14px;outline:none;}
+  .input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(31,58,95,0.15);}
+  .label{font-size:12px;font-weight:600;color:var(--n600);text-transform:uppercase;letter-spacing:0.04em;}
+  .price{font-weight:700;color:var(--primary);}
+  .sticky-rail{position:sticky;top:80px;}
+  .scroll-row{overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;}
+  .scroll-row > *{scroll-snap-align:start;flex-shrink:0;}
+  .scroll-row::-webkit-scrollbar{height:0;}
+  .lucide{width:18px;height:18px;stroke-width:2;display:inline-block;vertical-align:-3px;}
+
+  /* Image placeholder “photo” style — flat geometric shapes so prototype loads instantly with no network */
+  .img-ph{background:linear-gradient(135deg,#94A3B8,#475569);position:relative;overflow:hidden;}
+  .img-ph::after{content:attr(data-l);position:absolute;inset:auto 0 8px 0;text-align:center;font-size:11px;color:rgba(255,255,255,0.85);text-transform:uppercase;letter-spacing:1px;font-weight:600;}
+  .img-mobile  {background:linear-gradient(135deg,#475569,#1E293B);}
+  .img-car     {background:linear-gradient(135deg,#0F2138,#FF6B35);}
+  .img-flat    {background:linear-gradient(135deg,#1F3A5F,#0EA5E9);}
+  .img-sofa    {background:linear-gradient(135deg,#92400E,#FBBF24);}
+  .img-bike    {background:linear-gradient(135deg,#15803D,#84CC16);}
+  .img-laptop  {background:linear-gradient(135deg,#1E293B,#64748B);}
+  .img-cycle   {background:linear-gradient(135deg,#7C3AED,#A78BFA);}
+  .img-watch   {background:linear-gradient(135deg,#0EA5E9,#94A3B8);}
+  .img-tutor   {background:linear-gradient(135deg,#1F3A5F,#FF6B35);}
+  .img-plumb   {background:linear-gradient(135deg,#0369A1,#7DD3FC);}
+  .img-electr  {background:linear-gradient(135deg,#F59E0B,#FCD34D);}
+  .img-tv      {background:linear-gradient(135deg,#1E293B,#FF6B35);}
+  .img-fridge  {background:linear-gradient(135deg,#64748B,#CBD5E1);}
+  .avatar{display:inline-flex;align-items:center;justify-content:center;background:var(--primary);color:#fff;font-weight:700;border-radius:999px;}
+
+  /* Mobile phone frame */
+  .phone{width:390px;height:844px;border:8px solid #0F172A;border-radius:40px;background:#000;position:relative;box-shadow:0 30px 60px -20px rgba(15,23,42,0.45);margin:0 auto;}
+  .phone::before{content:"";position:absolute;top:8px;left:50%;transform:translateX(-50%);width:120px;height:24px;background:#0F172A;border-radius:0 0 16px 16px;z-index:50;}
+  .phone-screen{position:absolute;inset:0;background:#fff;border-radius:32px;overflow:hidden;display:flex;flex-direction:column;}
+  .phone-status{height:42px;flex-shrink:0;background:#fff;display:flex;align-items:flex-end;justify-content:space-between;padding:0 24px 4px;font-size:12px;font-weight:600;color:#0F172A;}
+  .phone-content{flex:1;overflow-y:auto;background:#F8FAFC;}
+  .phone-nav{height:74px;flex-shrink:0;background:#fff;border-top:1px solid var(--n200);display:grid;grid-template-columns:repeat(5,1fr);align-items:center;justify-items:center;padding:0 12px 18px;position:relative;}
+  .phone-nav button{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:10px;color:var(--n500);padding:4px;}
+  .phone-nav button.active{color:var(--primary);}
+  .phone-fab{position:absolute;top:-20px;left:50%;transform:translateX(-50%);width:56px;height:56px;border-radius:28px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 24px rgba(255,107,53,0.45);}
+
+  /* Hide/show screen helpers */
+  .screen{display:none;}
+  .screen.active{display:block;}
+
+  /* Stepper */
+  .step{display:flex;gap:12px;align-items:flex-start;padding:14px;border-radius:10px;cursor:pointer;}
+  .step.active{background:var(--primary-50);}
+  .step-num{flex-shrink:0;width:28px;height:28px;border-radius:14px;background:#fff;border:2px solid var(--n300);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:var(--n500);}
+  .step.active .step-num{background:var(--primary);color:#fff;border-color:var(--primary);}
+  .step.done .step-num{background:var(--success);color:#fff;border-color:var(--success);}
+  .star{color:#F59E0B;}
+
+  /* Web container width */
+  .wrap{max-width:1280px;margin:0 auto;padding:0 24px;}
+  header.wbar{position:sticky;top:64px;z-index:30;background:#fff;border-bottom:1px solid var(--n200);}
+</style>
+</head>
+<body class="min-h-screen">
+
+<!-- ============ TOP TOOLBAR (prototype controls) ============ -->
+<div class="fixed top-0 left-0 right-0 z-50 bg-[#0F172A] text-white" style="height:64px;">
+  <div class="wrap flex items-center justify-between h-full">
+    <div class="flex items-center gap-3">
+      <div class="font-extrabold text-lg">Classifly<span class="text-[#FF6B35]">.in</span></div>
+      <span class="text-xs text-slate-300">Interactive prototype · v1</span>
+    </div>
+    <div class="flex items-center gap-2">
+      <div class="bg-slate-800 rounded-lg p-1 flex">
+        <button id="modeWeb"    class="px-3 py-1.5 text-sm font-semibold rounded-md bg-white text-slate-900">Web</button>
+        <button id="modeMobile" class="px-3 py-1.5 text-sm font-semibold rounded-md text-slate-300">Mobile</button>
+      </div>
+      <select id="screenSel" class="bg-slate-800 text-white text-sm rounded-lg px-3 py-2 border border-slate-700"></select>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- =================== WEB VIEW =============================== -->
+<!-- ============================================================ -->
+<main id="webRoot" class="pt-16">
+
+<!-- Web header (shared) -->
+<header class="wbar">
+  <div class="wrap flex items-center gap-4 py-3">
+    <div class="font-extrabold text-xl" style="color:var(--primary);">Classifly<span style="color:var(--accent);">.in</span></div>
+    <button class="btn btn-secondary btn-sm">
+      <i data-lucide="map-pin"></i> Bengaluru <i data-lucide="chevron-down"></i>
+    </button>
+    <div class="flex-1 max-w-2xl mx-4 relative">
+      <input class="input pl-10" placeholder="Search for cars, mobiles, jobs, services …">
+      <i data-lucide="search" class="absolute left-3 top-2.5 text-slate-400"></i>
+    </div>
+    <button class="btn btn-secondary btn-sm">
+      <i data-lucide="languages"></i> EN
+    </button>
+    <button class="btn btn-secondary btn-sm" onclick="goto('web-chat')">
+      <i data-lucide="message-circle"></i>
+    </button>
+    <button class="btn btn-secondary btn-sm" onclick="goto('web-profile')">
+      <span class="avatar w-6 h-6 text-xs">R</span>
+    </button>
+    <button class="btn btn-accent" onclick="goto('web-postad')">
+      <i data-lucide="plus-circle"></i> SELL
+    </button>
+  </div>
+  <!-- vertical pills -->
+  <div class="wrap flex items-center gap-2 pb-3">
+    <button onclick="goto('web-home')"     class="chip chip-active"><i data-lucide="layout-grid"></i> All</button>
+    <button onclick="goto('web-search')"   class="chip"><i data-lucide="shopping-bag"></i> Buy &amp; Sell</button>
+    <button onclick="goto('web-jobs')"     class="chip"><i data-lucide="briefcase"></i> Jobs</button>
+    <button onclick="goto('web-services')" class="chip"><i data-lucide="wrench"></i> Services</button>
+    <button onclick="goto('web-search')"   class="chip"><i data-lucide="home"></i> Real Estate</button>
+    <button onclick="goto('web-search')"   class="chip"><i data-lucide="car"></i> Vehicles</button>
+    <button onclick="goto('web-search')"   class="chip"><i data-lucide="smartphone"></i> Mobiles</button>
+    <button onclick="goto('web-search')"   class="chip"><i data-lucide="sofa"></i> Furniture</button>
+    <button onclick="goto('web-search')"   class="chip"><i data-lucide="dog"></i> Pets</button>
+    <button onclick="goto('web-search')"   class="chip"><i data-lucide="book-open"></i> Books</button>
+  </div>
+</header>
+
+<!-- ===================== HOME ===================== -->
+<section id="web-home" class="screen active">
+  <div class="wrap py-6 space-y-8">
+
+    <!-- Hero featured carousel -->
+    <div>
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="text-lg font-bold">Featured today <span class="badge badge-featured ml-2">Promoted</span></h2>
+        <button class="btn btn-ghost btn-sm">See all <i data-lucide="arrow-right"></i></button>
+      </div>
+      <div class="scroll-row flex gap-4">
+        <!-- 5 featured cards -->
+        <div class="w-72 card overflow-hidden">
+          <div class="img-ph img-car h-44" data-l="iPhone 13 Pro · Bengaluru"></div>
+          <div class="p-3">
+            <div class="flex items-center justify-between"><div class="price text-lg">₹62,000</div><span class="badge badge-featured">Featured</span></div>
+            <div class="font-semibold mt-1">iPhone 13 Pro 128GB · Sierra Blue</div>
+            <div class="text-xs text-slate-500 mt-1 flex items-center gap-1"><i data-lucide="map-pin"></i> Indiranagar, Bengaluru · 2h ago</div>
+          </div>
+        </div>
+        <div class="w-72 card overflow-hidden">
+          <div class="img-ph img-flat h-44" data-l="2 BHK in HSR Layout"></div>
+          <div class="p-3">
+            <div class="flex items-center justify-between"><div class="price text-lg">₹35,000<span class="text-xs text-slate-500">/mo</span></div><span class="badge badge-featured">Featured</span></div>
+            <div class="font-semibold mt-1">2 BHK · Semi-furnished · HSR</div>
+            <div class="text-xs text-slate-500 mt-1 flex items-center gap-1"><i data-lucide="map-pin"></i> HSR Sector 2, Bengaluru</div>
+          </div>
+        </div>
+        <div class="w-72 card overflow-hidden">
+          <div class="img-ph img-bike h-44" data-l="Royal Enfield Classic 350"></div>
+          <div class="p-3">
+            <div class="flex items-center justify-between"><div class="price text-lg">₹1.28 L</div><span class="badge badge-featured">Featured</span></div>
+            <div class="font-semibold mt-1">RE Classic 350 · 2021 · 8,200 km</div>
+            <div class="text-xs text-slate-500 mt-1 flex items-center gap-1"><i data-lucide="map-pin"></i> Koramangala · 1d ago</div>
+          </div>
+        </div>
+        <div class="w-72 card overflow-hidden">
+          <div class="img-ph img-laptop h-44" data-l="MacBook Air M2"></div>
+          <div class="p-3">
+            <div class="flex items-center justify-between"><div class="price text-lg">₹84,500</div><span class="badge badge-verified"><i data-lucide="badge-check"></i> Verified</span></div>
+            <div class="font-semibold mt-1">MacBook Air M2 · 8GB · 256GB</div>
+            <div class="text-xs text-slate-500 mt-1 flex items-center gap-1"><i data-lucide="map-pin"></i> Whitefield · 3d ago</div>
+          </div>
+        </div>
+        <div class="w-72 card overflow-hidden">
+          <div class="img-ph img-sofa h-44" data-l="L-shape sofa, oak wood"></div>
+          <div class="p-3">
+            <div class="flex items-center justify-between"><div class="price text-lg">₹18,500</div><span class="badge badge-featured">Featured</span></div>
+            <div class="font-semibold mt-1">L-shape sofa · 6-seater · 1 yr old</div>
+            <div class="text-xs text-slate-500 mt-1 flex items-center gap-1"><i data-lucide="map-pin"></i> Jayanagar · 5d ago</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Vertical splits -->
+    <div class="grid grid-cols-4 gap-4">
+      <div class="card p-5 cursor-pointer hover:shadow-md transition" onclick="goto('web-search')">
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-3" style="background:var(--primary-50);color:var(--primary);"><i data-lucide="shopping-bag"></i></div>
+        <div class="font-bold">Buy &amp; Sell</div>
+        <div class="text-sm text-slate-500 mt-1">12.4 L active listings</div>
+      </div>
+      <div class="card p-5 cursor-pointer hover:shadow-md transition" onclick="goto('web-jobs')">
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-3" style="background:#FFE0D2;color:#C24016;"><i data-lucide="briefcase"></i></div>
+        <div class="font-bold">Jobs <span class="hindi text-sm text-slate-500">नौकरियां</span></div>
+        <div class="text-sm text-slate-500 mt-1">85K openings · Apply with voice CV</div>
+      </div>
+      <div class="card p-5 cursor-pointer hover:shadow-md transition" onclick="goto('web-services')">
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-3" style="background:#DCFCE7;color:#15803D;"><i data-lucide="wrench"></i></div>
+        <div class="font-bold">Services</div>
+        <div class="text-sm text-slate-500 mt-1">Verified pros · Same-day quotes</div>
+      </div>
+      <div class="card p-5 cursor-pointer hover:shadow-md transition" onclick="goto('web-search')">
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-3" style="background:#DBEAFE;color:#1E40AF;"><i data-lucide="home"></i></div>
+        <div class="font-bold">Real Estate</div>
+        <div class="text-sm text-slate-500 mt-1">Rent · Buy · PG · Commercial</div>
+      </div>
+    </div>
+
+    <!-- Hyperlocal feed -->
+    <div>
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="text-lg font-bold">Near you in Bengaluru</h2>
+        <div class="flex gap-2">
+          <select class="input py-2 w-auto text-sm"><option>Within 5 km</option><option>Within 10 km</option><option>Within 25 km</option></select>
+          <select class="input py-2 w-auto text-sm"><option>Newest</option><option>Lowest price</option><option>Most viewed</option></select>
+        </div>
+      </div>
+      <div class="grid grid-cols-4 gap-4">
+        <!-- listing cards -->
+        <div class="card overflow-hidden cursor-pointer" onclick="goto('web-listing')">
+          <div class="img-ph img-mobile h-40 relative" data-l="OnePlus 11R">
+            <button class="absolute top-2 right-2 bg-white/90 rounded-full p-1.5"><i data-lucide="bookmark"></i></button>
+          </div>
+          <div class="p-3">
+            <div class="price text-lg">₹28,500</div>
+            <div class="text-sm font-semibold truncate">OnePlus 11R 256GB · Sonic Black</div>
+            <div class="text-xs text-slate-500 mt-1">Koramangala · 1d ago</div>
+          </div>
+        </div>
+        <div class="card overflow-hidden cursor-pointer" onclick="goto('web-listing')">
+          <div class="img-ph img-cycle h-40 relative" data-l="Hero Cycle">
+            <button class="absolute top-2 right-2 bg-white/90 rounded-full p-1.5"><i data-lucide="bookmark"></i></button>
+          </div>
+          <div class="p-3">
+            <div class="price text-lg">₹4,200</div>
+            <div class="text-sm font-semibold truncate">Hero Sprint MTB 26" · Like new</div>
+            <div class="text-xs text-slate-500 mt-1">Indiranagar · 2d ago</div>
+          </div>
+        </div>
+        <div class="card overflow-hidden cursor-pointer" onclick="goto('web-listing')">
+          <div class="img-ph img-fridge h-40 relative" data-l="Samsung 253L Fridge">
+            <button class="absolute top-2 right-2 bg-white/90 rounded-full p-1.5"><i data-lucide="bookmark"></i></button>
+          </div>
+          <div class="p-3">
+            <div class="price text-lg">₹14,000</div>
+            <div class="text-sm font-semibold truncate">Samsung 253 L · 3-star · 2022</div>
+            <div class="text-xs text-slate-500 mt-1">BTM Layout · 3d ago</div>
+          </div>
+        </div>
+        <div class="card overflow-hidden cursor-pointer" onclick="goto('web-listing')">
+          <div class="img-ph img-tv h-40 relative" data-l="Sony 55 inch 4K">
+            <button class="absolute top-2 right-2 bg-white/90 rounded-full p-1.5"><i data-lucide="bookmark"></i></button>
+          </div>
+          <div class="p-3">
+            <div class="price text-lg">₹32,000</div>
+            <div class="text-sm font-semibold truncate">Sony Bravia 55" 4K · 6 months old</div>
+            <div class="text-xs text-slate-500 mt-1">HSR Layout · 4d ago</div>
+          </div>
+        </div>
+        <div class="card overflow-hidden cursor-pointer" onclick="goto('web-listing')">
+          <div class="img-ph img-car h-40 relative" data-l="Maruti Swift VXI 2019">
+            <button class="absolute top-2 right-2 bg-white/90 rounded-full p-1.5"><i data-lucide="bookmark"></i></button>
+          </div>
+          <div class="p-3">
+            <div class="price text-lg">₹5.25 L</div>
+            <div class="text-sm font-semibold truncate">Maruti Swift VXI 2019 · 45K km</div>
+            <div class="text-xs text-slate-500 mt-1">Whitefield · 1d ago</div>
+          </div>
+        </div>
+        <div class="card overflow-hidden cursor-pointer" onclick="goto('web-listing')">
+          <div class="img-ph img-flat h-40 relative" data-l="1 BHK furnished">
+            <button class="absolute top-2 right-2 bg-white/90 rounded-full p-1.5"><i data-lucide="bookmark"></i></button>
+          </div>
+          <div class="p-3">
+            <div class="price text-lg">₹18,000<span class="text-xs text-slate-500">/mo</span></div>
+            <div class="text-sm font-semibold truncate">1 BHK Furnished · Near Metro</div>
+            <div class="text-xs text-slate-500 mt-1">Indiranagar · 2d ago</div>
+          </div>
+        </div>
+        <div class="card overflow-hidden cursor-pointer" onclick="goto('web-listing')">
+          <div class="img-ph img-sofa h-40 relative" data-l="3-seater sofa">
+            <button class="absolute top-2 right-2 bg-white/90 rounded-full p-1.5"><i data-lucide="bookmark"></i></button>
+          </div>
+          <div class="p-3">
+            <div class="price text-lg">₹7,500</div>
+            <div class="text-sm font-semibold truncate">3-seater sofa · Beige · Good cond.</div>
+            <div class="text-xs text-slate-500 mt-1">Jayanagar · 5d ago</div>
+          </div>
+        </div>
+        <div class="card overflow-hidden cursor-pointer" onclick="goto('web-listing')">
+          <div class="img-ph img-watch h-40 relative" data-l="Apple Watch SE">
+            <button class="absolute top-2 right-2 bg-white/90 rounded-full p-1.5"><i data-lucide="bookmark"></i></button>
+          </div>
+          <div class="p-3">
+            <div class="price text-lg">₹17,800</div>
+            <div class="text-sm font-semibold truncate">Apple Watch SE 44mm · 2023</div>
+            <div class="text-xs text-slate-500 mt-1">Marathahalli · 1w ago</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Trust panel -->
+    <div class="card p-5 flex items-center gap-6" style="background:linear-gradient(135deg,#F0F4F9,#FFF4EF);">
+      <div class="w-14 h-14 rounded-xl flex items-center justify-center" style="background:#fff;color:var(--primary);"><i data-lucide="shield-check" class="w-7 h-7"></i></div>
+      <div class="flex-1">
+        <div class="font-bold">Buy and sell safely on Classifly</div>
+        <div class="text-sm text-slate-600">Phone numbers stay private. KYC-verified sellers get a badge. Pay only when you meet — or use escrow for high-value deals.</div>
+      </div>
+      <button class="btn btn-secondary">Read safety tips</button>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===================== SEARCH RESULTS ===================== -->
+<section id="web-search" class="screen">
+  <div class="wrap py-6">
+    <div class="text-sm text-slate-500 mb-3">Home <i data-lucide="chevron-right" class="w-3 h-3 inline"></i> Vehicles <i data-lucide="chevron-right" class="w-3 h-3 inline"></i> Cars <i data-lucide="chevron-right" class="w-3 h-3 inline"></i> Bengaluru</div>
+    <div class="flex items-center justify-between mb-5">
+      <div>
+        <h1 class="text-2xl font-bold">Cars in Bengaluru</h1>
+        <div class="text-sm text-slate-500">8,432 results · "Maruti Swift" · within 25 km</div>
+      </div>
+      <div class="flex gap-2">
+        <button class="btn btn-secondary btn-sm"><i data-lucide="bell-plus"></i> Save search</button>
+        <div class="flex border border-slate-200 rounded-lg overflow-hidden">
+          <button class="px-3 py-2 bg-white"><i data-lucide="layout-grid"></i></button>
+          <button class="px-3 py-2 text-slate-500"><i data-lucide="list"></i></button>
+          <button class="px-3 py-2 text-slate-500"><i data-lucide="map"></i></button>
+        </div>
+        <select class="input py-2 w-auto text-sm"><option>Sort: Newest</option><option>Lowest price</option><option>Highest price</option><option>Lowest km</option></select>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-[280px_1fr] gap-6">
+      <!-- Filter sidebar -->
+      <aside class="sticky-rail self-start space-y-4">
+        <div class="card p-4">
+          <div class="font-bold mb-3">Filters</div>
+
+          <div class="label mb-2">Price (₹)</div>
+          <div class="flex gap-2 mb-3"><input class="input text-sm" placeholder="Min"><input class="input text-sm" placeholder="Max"></div>
+
+          <div class="label mb-2 mt-4">Year</div>
+          <div class="flex gap-2 mb-3"><input class="input text-sm" placeholder="2015"><input class="input text-sm" placeholder="2024"></div>
+
+          <div class="label mb-2 mt-4">KM driven</div>
+          <div class="flex flex-wrap gap-1.5 mb-3">
+            <span class="chip">&lt; 20K</span><span class="chip chip-active">20–50K</span><span class="chip">50–80K</span><span class="chip">80K+</span>
+          </div>
+
+          <div class="label mb-2 mt-4">Fuel</div>
+          <div class="flex flex-wrap gap-1.5 mb-3">
+            <span class="chip chip-active">Petrol</span><span class="chip">Diesel</span><span class="chip">CNG</span><span class="chip">Electric</span>
+          </div>
+
+          <div class="label mb-2 mt-4">Transmission</div>
+          <div class="flex flex-wrap gap-1.5 mb-3">
+            <span class="chip chip-active">Manual</span><span class="chip">Automatic</span>
+          </div>
+
+          <div class="label mb-2 mt-4">Owners</div>
+          <div class="flex flex-wrap gap-1.5 mb-3">
+            <span class="chip chip-active">1st</span><span class="chip chip-active">2nd</span><span class="chip">3rd</span><span class="chip">4+</span>
+          </div>
+
+          <div class="label mb-2 mt-4">Verified seller only</div>
+          <label class="flex items-center gap-2 text-sm"><input type="checkbox" checked> Show KYC-verified only</label>
+
+          <button class="btn btn-primary w-full mt-4">Apply filters (8.4K results)</button>
+          <button class="btn btn-ghost w-full mt-2 text-sm">Clear all</button>
+        </div>
+      </aside>
+
+      <!-- Results grid -->
+      <div class="grid grid-cols-3 gap-4">
+        <!-- 9 cards -->
+        <div class="card overflow-hidden cursor-pointer" onclick="goto('web-listing')">
+          <div class="img-ph img-car h-44 relative" data-l="Maruti Swift VXI 2019">
+            <span class="absolute top-2 left-2 badge badge-featured">Featured</span>
+            <button class="absolute top-2 right-2 bg-white/90 rounded-full p-1.5"><i data-lucide="bookmark"></i></button>
+          </div>
+          <div class="p-3">
+            <div class="price text-lg">₹5.25 L</div>
+            <div class="font-semibold truncate">Maruti Swift VXI 2019</div>
+            <div class="text-xs text-slate-500 mt-1">45,000 km · Petrol · 1st owner</div>
+            <div class="flex items-center justify-between mt-2 text-xs text-slate-500"><span>Whitefield · 1d</span><span class="badge badge-verified"><i data-lucide="badge-check"></i> Verified</span></div>
+          </div>
+        </div>
+        <div class="card overflow-hidden cursor-pointer" onclick="goto('web-listing')">
+          <div class="img-ph img-car h-44 relative" data-l="Swift Dzire 2017">
+            <button class="absolute top-2 right-2 bg-white/90 rounded-full p-1.5"><i data-lucide="bookmark"></i></button>
+          </div>
+          <div class="p-3">
+            <div class="price text-lg">₹4.10 L</div>
+            <div class="font-semibold truncate">Swift Dzire ZXI 2017</div>
+            <div class="text-xs text-slate-500 mt-1">62,000 km · Diesel · 2nd owner</div>
+            <div class="flex items-center justify-between mt-2 text-xs text-slate-500"><span>HSR Layout · 2d</span></div>
+          </div>
+        </div>
+        <div class="card overflow-hidden cursor-pointer" onclick="goto('web-listing')">
+          <div class="img-ph img-car h-44 relative" data-l="Maruti Swift 2021">
+            <span class="absolute top-2 left-2 badge badge-urgent">Urgent</span>
+            <button class="absolute top-2 right-2 bg-white/90 rounded-full p-1.5"><i data-lucide="bookmark"></i></button>
+          </div>
+          <div class="p-3">
+            <div class="price text-lg">₹6.40 L</div>
+            <div class="font-semibold truncate">Maruti Swift ZXI 2021</div>
+            <div class="text-xs text-slate-500 mt-1">22,000 km · Petrol · 1st owner</div>
+            <div class="flex items-center justify-between mt-2 text-xs text-slate-500"><span>Marathahalli · 3d</span><span class="badge badge-verified"><i data-lucide="badge-check"></i> Verified</span></div>
+          </div>
+        </div>
+        <div class="card overflow-hidden cursor-pointer" onclick="goto('web-listing')">
+          <div class="img-ph img-car h-44 relative" data-l="Swift LDI 2015">
+            <button class="absolute top-2 right-2 bg-white/90 rounded-full p-1.5"><i data-lucide="bookmark"></i></button>
+          </div>
+          <div class="p-3">
+            <div class="price text-lg">₹3.20 L</div>
+            <div class="font-semibold truncate">Maruti Swift LDI 2015</div>
+            <div class="text-xs text-slate-500 mt-1">90,500 km · Diesel · 2nd owner</div>
+            <div class="flex items-center justify-between mt-2 text-xs text-slate-500"><span>Jayanagar · 4d</span></div>
+          </div>
+        </div>
+        <div class="card overflow-hidden cursor-pointer" onclick="goto('web-listing')">
+          <div class="img-ph img-car h-44 relative" data-l="Swift ZDI 2018">
+            <button class="absolute top-2 right-2 bg-white/90 rounded-full p-1.5"><i data-lucide="bookmark"></i></button>
+          </div>
+          <div class="p-3">
+            <div class="price text-lg">₹4.85 L</div>
+            <div class="font-semibold truncate">Maruti Swift ZDI 2018</div>
+            <div class="text-xs text-slate-500 mt-1">55,200 km · Diesel · 1st owner</div>
+            <div class="flex items-center justify-between mt-2 text-xs text-slate-500"><span>Koramangala · 5d</span><span class="badge badge-verified"><i data-lucide="badge-check"></i> Verified</span></div>
+          </div>
+        </div>
+        <div class="card overflow-hidden cursor-pointer" onclick="goto('web-listing')">
+          <div class="img-ph img-car h-44 relative" data-l="Swift Dzire 2020">
+            <button class="absolute top-2 right-2 bg-white/90 rounded-full p-1.5"><i data-lucide="bookmark"></i></button>
+          </div>
+          <div class="p-3">
+            <div class="price text-lg">₹5.95 L</div>
+            <div class="font-semibold truncate">Swift Dzire VXI 2020</div>
+            <div class="text-xs text-slate-500 mt-1">38,000 km · Petrol · 1st owner</div>
+            <div class="flex items-center justify-between mt-2 text-xs text-slate-500"><span>Indiranagar · 1w</span></div>
+          </div>
+        </div>
+        <div class="card overflow-hidden cursor-pointer" onclick="goto('web-listing')">
+          <div class="img-ph img-car h-44 relative" data-l="Swift VXI 2016">
+            <button class="absolute top-2 right-2 bg-white/90 rounded-full p-1.5"><i data-lucide="bookmark"></i></button>
+          </div>
+          <div class="p-3">
+            <div class="price text-lg">₹3.75 L</div>
+            <div class="font-semibold truncate">Maruti Swift VXI 2016</div>
+            <div class="text-xs text-slate-500 mt-1">78,000 km · Petrol · 2nd owner</div>
+            <div class="flex items-center justify-between mt-2 text-xs text-slate-500"><span>BTM Layout · 1w</span></div>
+          </div>
+        </div>
+        <div class="card overflow-hidden cursor-pointer" onclick="goto('web-listing')">
+          <div class="img-ph img-car h-44 relative" data-l="Swift ZXI Plus 2022">
+            <button class="absolute top-2 right-2 bg-white/90 rounded-full p-1.5"><i data-lucide="bookmark"></i></button>
+          </div>
+          <div class="p-3">
+            <div class="price text-lg">₹7.20 L</div>
+            <div class="font-semibold truncate">Swift ZXI+ 2022 · Sunroof</div>
+            <div class="text-xs text-slate-500 mt-1">15,500 km · Petrol · 1st owner</div>
+            <div class="flex items-center justify-between mt-2 text-xs text-slate-500"><span>Whitefield · 2w</span><span class="badge badge-verified"><i data-lucide="badge-check"></i> Verified</span></div>
+          </div>
+        </div>
+        <div class="card overflow-hidden cursor-pointer" onclick="goto('web-listing')">
+          <div class="img-ph img-car h-44 relative" data-l="Swift Dzire 2014">
+            <button class="absolute top-2 right-2 bg-white/90 rounded-full p-1.5"><i data-lucide="bookmark"></i></button>
+          </div>
+          <div class="p-3">
+            <div class="price text-lg">₹2.80 L</div>
+            <div class="font-semibold truncate">Swift Dzire LDI 2014</div>
+            <div class="text-xs text-slate-500 mt-1">1,10,000 km · Diesel · 3rd owner</div>
+            <div class="flex items-center justify-between mt-2 text-xs text-slate-500"><span>Hebbal · 2w</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== LISTING DETAIL ===================== -->
+<section id="web-listing" class="screen">
+  <div class="wrap py-6">
+    <div class="text-sm text-slate-500 mb-4">Home <i data-lucide="chevron-right" class="w-3 h-3 inline"></i> Vehicles <i data-lucide="chevron-right" class="w-3 h-3 inline"></i> Cars <i data-lucide="chevron-right" class="w-3 h-3 inline"></i> Maruti Swift VXI 2019</div>
+
+    <div class="grid grid-cols-[1fr_360px] gap-6">
+      <div class="space-y-5">
+        <!-- Image gallery -->
+        <div class="card overflow-hidden">
+          <div class="img-ph img-car h-96 relative" data-l="Photo 1 of 8">
+            <button class="absolute left-3 top-1/2 -translate-y-1/2 bg-white/90 rounded-full p-2"><i data-lucide="chevron-left"></i></button>
+            <button class="absolute right-3 top-1/2 -translate-y-1/2 bg-white/90 rounded-full p-2"><i data-lucide="chevron-right"></i></button>
+            <div class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-white"></span>
+              <span class="w-2 h-2 rounded-full bg-white/50"></span>
+              <span class="w-2 h-2 rounded-full bg-white/50"></span>
+              <span class="w-2 h-2 rounded-full bg-white/50"></span>
+              <span class="w-2 h-2 rounded-full bg-white/50"></span>
+            </div>
+          </div>
+          <div class="flex gap-2 p-3">
+            <div class="img-ph img-car w-20 h-16 rounded" data-l=""></div>
+            <div class="img-ph img-car w-20 h-16 rounded opacity-70" data-l=""></div>
+            <div class="img-ph img-car w-20 h-16 rounded opacity-70" data-l=""></div>
+            <div class="img-ph img-car w-20 h-16 rounded opacity-70" data-l=""></div>
+            <div class="img-ph img-car w-20 h-16 rounded opacity-70 relative" data-l="">
+              <div class="absolute inset-0 bg-black/50 rounded flex items-center justify-center text-white font-semibold text-sm">+3</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Title + price -->
+        <div class="card p-5">
+          <div class="flex items-start justify-between">
+            <div>
+              <div class="flex items-center gap-2"><span class="badge badge-featured">Featured</span><span class="badge badge-verified"><i data-lucide="badge-check"></i> Verified seller</span></div>
+              <h1 class="text-2xl font-bold mt-2">Maruti Swift VXI 2019 — Single owner, well maintained</h1>
+              <div class="text-sm text-slate-500 mt-1 flex items-center gap-3">
+                <span><i data-lucide="map-pin"></i> Whitefield, Bengaluru</span>
+                <span><i data-lucide="clock"></i> Posted 1 day ago</span>
+                <span><i data-lucide="eye"></i> 1,284 views</span>
+              </div>
+            </div>
+            <div class="flex gap-2">
+              <button class="btn btn-secondary btn-sm"><i data-lucide="bookmark"></i> Save</button>
+              <button class="btn btn-secondary btn-sm"><i data-lucide="share-2"></i> Share</button>
+              <button class="btn btn-secondary btn-sm"><i data-lucide="flag"></i></button>
+            </div>
+          </div>
+          <div class="flex items-baseline gap-3 mt-4">
+            <div class="text-4xl font-extrabold" style="color:var(--primary);">₹5,25,000</div>
+            <span class="badge" style="background:#FEF3C7;color:#A16207;">Negotiable</span>
+          </div>
+        </div>
+
+        <!-- Spec table -->
+        <div class="card p-5">
+          <h2 class="font-bold text-lg mb-3">Vehicle details</h2>
+          <div class="grid grid-cols-2 gap-y-3 text-sm">
+            <div class="text-slate-500">Brand</div><div class="font-semibold">Maruti Suzuki</div>
+            <div class="text-slate-500">Model</div><div class="font-semibold">Swift VXI</div>
+            <div class="text-slate-500">Year</div><div class="font-semibold">2019</div>
+            <div class="text-slate-500">KM driven</div><div class="font-semibold">45,000 km</div>
+            <div class="text-slate-500">Fuel</div><div class="font-semibold">Petrol</div>
+            <div class="text-slate-500">Transmission</div><div class="font-semibold">Manual</div>
+            <div class="text-slate-500">Number of owners</div><div class="font-semibold">1st</div>
+            <div class="text-slate-500">Registration</div><div class="font-semibold">KA-51 (Bengaluru East)</div>
+            <div class="text-slate-500">Insurance</div><div class="font-semibold">Valid till Mar 2026</div>
+          </div>
+        </div>
+
+        <!-- Description -->
+        <div class="card p-5">
+          <h2 class="font-bold text-lg mb-3">Description</h2>
+          <p class="text-slate-700 leading-relaxed">Single owner since new. All services done on time at authorised Maruti dealership (Bimal Auto, Whitefield). New tyres fitted last month. No accidents. Insurance valid until March 2026. Selling because I'm relocating to Hyderabad next month. Genuine buyers only, please. Test drive welcome — bring your own driving licence.</p>
+          <div class="hindi text-slate-600 mt-3 text-sm">केवल genuine खरीदार संपर्क करें। Test drive के लिए आ सकते हैं।</div>
+        </div>
+
+        <!-- Similar listings -->
+        <div>
+          <h2 class="font-bold text-lg mb-3">Similar listings</h2>
+          <div class="scroll-row flex gap-4">
+            <div class="w-60 card overflow-hidden">
+              <div class="img-ph img-car h-36" data-l="Swift Dzire 2017"></div>
+              <div class="p-3"><div class="price">₹4.10 L</div><div class="text-sm truncate">Swift Dzire ZXI 2017</div><div class="text-xs text-slate-500">62K km · HSR</div></div>
+            </div>
+            <div class="w-60 card overflow-hidden">
+              <div class="img-ph img-car h-36" data-l="Swift LDI 2015"></div>
+              <div class="p-3"><div class="price">₹3.20 L</div><div class="text-sm truncate">Swift LDI 2015 · Diesel</div><div class="text-xs text-slate-500">90K km · Jayanagar</div></div>
+            </div>
+            <div class="w-60 card overflow-hidden">
+              <div class="img-ph img-car h-36" data-l="Swift ZXI Plus 2022"></div>
+              <div class="p-3"><div class="price">₹7.20 L</div><div class="text-sm truncate">Swift ZXI+ 2022 · Sunroof</div><div class="text-xs text-slate-500">15K km · Whitefield</div></div>
+            </div>
+            <div class="w-60 card overflow-hidden">
+              <div class="img-ph img-car h-36" data-l="Swift VXI 2021"></div>
+              <div class="p-3"><div class="price">₹6.40 L</div><div class="text-sm truncate">Swift VXI 2021 · 1st owner</div><div class="text-xs text-slate-500">22K km · Marathahalli</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right rail: seller + chat -->
+      <aside class="sticky-rail self-start space-y-4">
+        <div class="card p-5">
+          <div class="flex items-center gap-3">
+            <span class="avatar w-12 h-12">R</span>
+            <div class="flex-1">
+              <div class="font-bold">Rohit Sharma</div>
+              <div class="text-xs text-slate-500">Member since Feb 2024</div>
+            </div>
+          </div>
+          <div class="flex gap-2 mt-3">
+            <span class="badge badge-kyc"><i data-lucide="badge-check"></i> KYC Tier 2</span>
+            <span class="badge" style="background:#FEF3C7;color:#A16207;"><i data-lucide="star"></i> 4.8 (32)</span>
+          </div>
+          <div class="grid grid-cols-2 gap-2 mt-3 text-center text-xs">
+            <div class="bg-slate-50 rounded-lg p-2"><div class="font-bold text-base">12</div><div class="text-slate-500">Active</div></div>
+            <div class="bg-slate-50 rounded-lg p-2"><div class="font-bold text-base">48</div><div class="text-slate-500">Sold</div></div>
+          </div>
+          <button class="btn btn-primary w-full mt-4"><i data-lucide="message-circle"></i> Chat with seller</button>
+          <button class="btn btn-secondary w-full mt-2"><i data-lucide="phone"></i> Show phone (masked)</button>
+          <div class="text-xs text-slate-500 mt-2 text-center">Your number stays private. Calls are routed through Classifly.</div>
+        </div>
+
+        <div class="card p-4" style="background:#FFF4EF;border-color:#FFE0D2;">
+          <div class="flex items-start gap-3">
+            <i data-lucide="shield-alert" style="color:var(--accent);" class="mt-0.5"></i>
+            <div class="text-sm">
+              <div class="font-semibold" style="color:var(--accent-700);">Safety tips</div>
+              <ul class="text-slate-700 mt-1 space-y-1">
+                <li>• Meet in a public place during daytime</li>
+                <li>• Check vehicle papers before payment</li>
+                <li>• Never share OTPs or pay in advance</li>
+                <li>• Use escrow for high-value deals</li>
+              </ul>
+              <a class="font-semibold mt-2 inline-block" style="color:var(--accent-700);">Learn more →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="card p-4">
+          <div class="label">Inspection &amp; delivery</div>
+          <div class="mt-2 space-y-2">
+            <label class="flex items-start gap-2 text-sm"><input type="checkbox"> Book vehicle inspection (₹999)</label>
+            <label class="flex items-start gap-2 text-sm"><input type="checkbox"> Use escrow service (₹499)</label>
+            <label class="flex items-start gap-2 text-sm"><input type="checkbox"> Doorstep delivery via partner</label>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== POST-AD WIZARD ===================== -->
+<section id="web-postad" class="screen">
+  <div class="wrap py-6">
+    <h1 class="text-2xl font-bold mb-1">Post your ad</h1>
+    <div class="text-sm text-slate-500 mb-6">Free for personal listings. Boost to top for ₹49 to get 5× more views.</div>
+
+    <div class="grid grid-cols-[280px_1fr] gap-6">
+      <!-- Left rail with steps -->
+      <aside class="sticky-rail self-start">
+        <div class="card p-3 space-y-1">
+          <div class="step done"><div class="step-num"><i data-lucide="check" class="w-3 h-3"></i></div><div><div class="font-semibold">Category</div><div class="text-xs text-slate-500">Vehicles → Cars</div></div></div>
+          <div class="step active"><div class="step-num">2</div><div><div class="font-semibold">Details</div><div class="text-xs text-slate-500">Title, attributes, description</div></div></div>
+          <div class="step"><div class="step-num">3</div><div><div class="font-semibold">Photos</div><div class="text-xs text-slate-500">Up to 10 photos · drag to reorder</div></div></div>
+          <div class="step"><div class="step-num">4</div><div><div class="font-semibold">Price &amp; location</div><div class="text-xs text-slate-500">Set price, type, city</div></div></div>
+        </div>
+        <div class="card p-4 mt-4" style="background:#F0F4F9;border-color:#D9E2EE;">
+          <div class="flex items-start gap-2 text-sm">
+            <i data-lucide="info" style="color:var(--primary);"></i>
+            <div>
+              <div class="font-semibold" style="color:var(--primary);">Better photos sell faster</div>
+              <div class="text-slate-600 text-xs mt-1">Listings with 5+ clear photos get <b>3× more chats</b> than those with 1–2 photos.</div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Step content -->
+      <div class="card p-6">
+        <h2 class="font-bold text-lg mb-1">Tell us about your car</h2>
+        <div class="text-sm text-slate-500 mb-5">Fields with * are required.</div>
+
+        <div class="space-y-5">
+          <div>
+            <div class="label mb-2">Ad title *</div>
+            <input class="input" value="Maruti Swift VXI 2019 — Single owner, well maintained">
+            <div class="text-xs text-slate-500 mt-1">63 / 70 · Tip: include brand, model, year, condition</div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <div class="label mb-2">Brand *</div>
+              <select class="input"><option>Maruti Suzuki</option><option>Hyundai</option><option>Tata</option><option>Honda</option></select>
+            </div>
+            <div>
+              <div class="label mb-2">Model *</div>
+              <input class="input" value="Swift VXI">
+            </div>
+            <div>
+              <div class="label mb-2">Year *</div>
+              <input class="input" value="2019">
+            </div>
+            <div>
+              <div class="label mb-2">KM driven *</div>
+              <input class="input" value="45000">
+            </div>
+            <div>
+              <div class="label mb-2">Fuel type *</div>
+              <div class="flex gap-1.5 flex-wrap">
+                <span class="chip chip-active">Petrol</span><span class="chip">Diesel</span><span class="chip">CNG</span><span class="chip">Electric</span><span class="chip">Hybrid</span>
+              </div>
+            </div>
+            <div>
+              <div class="label mb-2">Transmission *</div>
+              <div class="flex gap-1.5">
+                <span class="chip chip-active">Manual</span><span class="chip">Automatic</span>
+              </div>
+            </div>
+            <div class="col-span-2">
+              <div class="label mb-2">Number of owners *</div>
+              <div class="flex gap-1.5">
+                <span class="chip chip-active">1st</span><span class="chip">2nd</span><span class="chip">3rd</span><span class="chip">4+</span>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="label mb-2">Description *</div>
+            <textarea class="input min-h-32" rows="5">Single owner since new. All services done on time at authorised Maruti dealership. New tyres fitted last month. No accidents. Insurance valid till March 2026. Genuine buyers only.</textarea>
+            <div class="flex justify-between text-xs text-slate-500 mt-1">
+              <span>312 / 4000 characters</span>
+              <button class="font-semibold" style="color:var(--primary);"><i data-lucide="languages"></i> Also write in Hindi</button>
+            </div>
+          </div>
+
+          <div>
+            <div class="label mb-2">Tags (optional)</div>
+            <div class="flex flex-wrap gap-1.5"><span class="chip">+ single owner</span><span class="chip">+ insurance valid</span><span class="chip">+ new tyres</span></div>
+          </div>
+        </div>
+
+        <div class="flex justify-between mt-8 pt-5 border-t border-slate-200">
+          <button class="btn btn-secondary"><i data-lucide="chevron-left"></i> Back</button>
+          <div class="flex gap-2">
+            <button class="btn btn-ghost">Save draft</button>
+            <button class="btn btn-primary">Next: Photos <i data-lucide="chevron-right"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PROFILE ===================== -->
+<section id="web-profile" class="screen">
+  <div class="wrap py-6">
+    <div class="grid grid-cols-[280px_1fr] gap-6">
+      <aside class="sticky-rail self-start">
+        <div class="card p-5 text-center">
+          <span class="avatar w-20 h-20 text-2xl mx-auto">R</span>
+          <div class="font-bold text-lg mt-3">Rohit Sharma</div>
+          <div class="text-xs text-slate-500">Bengaluru · Joined Feb 2024</div>
+          <div class="flex justify-center gap-1.5 mt-3">
+            <span class="badge badge-kyc"><i data-lucide="badge-check"></i> KYC Tier 2</span>
+            <span class="badge" style="background:#FEF3C7;color:#A16207;"><i data-lucide="star"></i> 4.8</span>
+          </div>
+          <button class="btn btn-secondary w-full mt-4 btn-sm">Edit profile</button>
+        </div>
+
+        <div class="card p-3 mt-4 space-y-0.5">
+          <button class="w-full text-left px-3 py-2.5 rounded-lg bg-slate-100 font-semibold flex items-center gap-2"><i data-lucide="package"></i> My listings <span class="ml-auto text-xs text-slate-500">12</span></button>
+          <button class="w-full text-left px-3 py-2.5 rounded-lg hover:bg-slate-50 flex items-center gap-2"><i data-lucide="bookmark"></i> Saved <span class="ml-auto text-xs text-slate-500">34</span></button>
+          <button class="w-full text-left px-3 py-2.5 rounded-lg hover:bg-slate-50 flex items-center gap-2" onclick="goto('web-chat')"><i data-lucide="message-circle"></i> Chats <span class="ml-auto text-xs text-slate-500">3</span></button>
+          <button class="w-full text-left px-3 py-2.5 rounded-lg hover:bg-slate-50 flex items-center gap-2"><i data-lucide="star"></i> Reviews</button>
+          <button class="w-full text-left px-3 py-2.5 rounded-lg hover:bg-slate-50 flex items-center gap-2"><i data-lucide="wallet"></i> Wallet <span class="ml-auto badge" style="background:#DCFCE7;color:#15803D;">₹250 credit</span></button>
+          <button class="w-full text-left px-3 py-2.5 rounded-lg hover:bg-slate-50 flex items-center gap-2"><i data-lucide="settings"></i> Settings</button>
+          <button class="w-full text-left px-3 py-2.5 rounded-lg hover:bg-red-50 flex items-center gap-2 text-red-600"><i data-lucide="log-out"></i> Sign out</button>
+        </div>
+      </aside>
+
+      <div>
+        <div class="flex items-center justify-between mb-4">
+          <h1 class="text-xl font-bold">My listings</h1>
+          <div class="flex gap-2">
+            <span class="chip chip-active">Active (8)</span>
+            <span class="chip">Draft (2)</span>
+            <span class="chip">Sold (48)</span>
+            <span class="chip">Expired (14)</span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-4">
+          <div class="card overflow-hidden">
+            <div class="img-ph img-car h-36 relative" data-l="Maruti Swift VXI 2019">
+              <span class="absolute top-2 left-2 badge badge-featured">Featured · 4d left</span>
+            </div>
+            <div class="p-3">
+              <div class="price">₹5.25 L</div>
+              <div class="text-sm font-semibold truncate">Maruti Swift VXI 2019</div>
+              <div class="text-xs text-slate-500 mt-1">1,284 views · 18 chats</div>
+              <div class="flex gap-1.5 mt-2">
+                <button class="btn btn-secondary btn-sm flex-1">Edit</button>
+                <button class="btn btn-accent btn-sm flex-1"><i data-lucide="rocket"></i> Boost</button>
+              </div>
+            </div>
+          </div>
+          <div class="card overflow-hidden">
+            <div class="img-ph img-laptop h-36" data-l="MacBook Pro M1"></div>
+            <div class="p-3">
+              <div class="price">₹74,000</div>
+              <div class="text-sm font-semibold truncate">MacBook Pro M1 2020</div>
+              <div class="text-xs text-slate-500 mt-1">412 views · 5 chats</div>
+              <div class="flex gap-1.5 mt-2">
+                <button class="btn btn-secondary btn-sm flex-1">Edit</button>
+                <button class="btn btn-accent btn-sm flex-1"><i data-lucide="rocket"></i> Boost</button>
+              </div>
+            </div>
+          </div>
+          <div class="card overflow-hidden">
+            <div class="img-ph img-fridge h-36" data-l="Whirlpool 240L Fridge"></div>
+            <div class="p-3">
+              <div class="price">₹11,500</div>
+              <div class="text-sm font-semibold truncate">Whirlpool 240 L Fridge</div>
+              <div class="text-xs text-slate-500 mt-1">238 views · 2 chats</div>
+              <div class="flex gap-1.5 mt-2">
+                <button class="btn btn-secondary btn-sm flex-1">Edit</button>
+                <button class="btn btn-accent btn-sm flex-1"><i data-lucide="rocket"></i> Boost</button>
+              </div>
+            </div>
+          </div>
+          <div class="card overflow-hidden">
+            <div class="img-ph img-sofa h-36" data-l="3-seater sofa"></div>
+            <div class="p-3">
+              <div class="price">₹7,500</div>
+              <div class="text-sm font-semibold truncate">3-seater sofa · Beige</div>
+              <div class="text-xs text-slate-500 mt-1">186 views · 1 chat</div>
+              <div class="flex gap-1.5 mt-2">
+                <button class="btn btn-secondary btn-sm flex-1">Edit</button>
+                <button class="btn btn-accent btn-sm flex-1"><i data-lucide="rocket"></i> Boost</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CHAT ===================== -->
+<section id="web-chat" class="screen">
+  <div class="wrap py-6">
+    <div class="card overflow-hidden" style="height:calc(100vh - 200px);min-height:600px;">
+      <div class="grid grid-cols-[300px_1fr_320px] h-full">
+        <!-- Conversation list -->
+        <div class="border-r border-slate-200 flex flex-col">
+          <div class="p-3 border-b border-slate-200">
+            <input class="input text-sm" placeholder="Search chats">
+          </div>
+          <div class="overflow-y-auto flex-1">
+            <button class="w-full flex gap-3 p-3 hover:bg-slate-50 text-left border-l-4" style="background:#F0F4F9;border-color:var(--primary);">
+              <span class="avatar w-11 h-11">A</span>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center justify-between"><div class="font-semibold truncate">Anjali Reddy</div><div class="text-xs text-slate-500">2m</div></div>
+                <div class="text-xs text-slate-500 truncate">Maruti Swift VXI 2019</div>
+                <div class="text-sm truncate mt-0.5">Can I come for a test drive tomorrow at …</div>
+              </div>
+              <span class="bg-[#FF6B35] text-white text-xs font-bold rounded-full px-2 py-0.5 self-center">2</span>
+            </button>
+            <button class="w-full flex gap-3 p-3 hover:bg-slate-50 text-left">
+              <span class="avatar w-11 h-11" style="background:#15803D;">V</span>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center justify-between"><div class="font-semibold truncate">Vikram Patel</div><div class="text-xs text-slate-500">1h</div></div>
+                <div class="text-xs text-slate-500 truncate">MacBook Pro M1 2020</div>
+                <div class="text-sm truncate text-slate-500 mt-0.5">Is the price negotiable?</div>
+              </div>
+            </button>
+            <button class="w-full flex gap-3 p-3 hover:bg-slate-50 text-left">
+              <span class="avatar w-11 h-11" style="background:#C24016;">P</span>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center justify-between"><div class="font-semibold truncate">Priya Nair</div><div class="text-xs text-slate-500">3h</div></div>
+                <div class="text-xs text-slate-500 truncate">3-seater sofa · Beige</div>
+                <div class="text-sm truncate text-slate-500 mt-0.5">Sold? Or still available?</div>
+              </div>
+            </button>
+            <button class="w-full flex gap-3 p-3 hover:bg-slate-50 text-left">
+              <span class="avatar w-11 h-11" style="background:#1E40AF;">S</span>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center justify-between"><div class="font-semibold truncate">Saurabh Joshi</div><div class="text-xs text-slate-500">1d</div></div>
+                <div class="text-xs text-slate-500 truncate">Whirlpool 240 L Fridge</div>
+                <div class="text-sm truncate text-slate-500 mt-0.5">Thanks! 👍</div>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Active thread -->
+        <div class="flex flex-col">
+          <div class="p-3 border-b border-slate-200 flex items-center gap-3">
+            <span class="avatar w-10 h-10">A</span>
+            <div class="flex-1">
+              <div class="font-semibold">Anjali Reddy <span class="badge badge-kyc"><i data-lucide="badge-check"></i> KYC</span></div>
+              <div class="text-xs text-slate-500"><span class="inline-block w-1.5 h-1.5 rounded-full bg-green-500"></span> Online now</div>
+            </div>
+            <button class="btn btn-secondary btn-sm"><i data-lucide="phone"></i> Call</button>
+            <button class="btn btn-secondary btn-sm"><i data-lucide="more-vertical"></i></button>
+          </div>
+          <div class="flex-1 overflow-y-auto p-4 space-y-3 bg-slate-50">
+            <div class="text-center"><span class="text-xs text-slate-500 bg-white px-3 py-1 rounded-full">Today</span></div>
+            <div class="flex"><div class="max-w-md bg-white rounded-2xl rounded-tl-sm p-3 text-sm">Hi! Is the Swift still available?</div></div>
+            <div class="flex justify-end"><div class="max-w-md text-white rounded-2xl rounded-tr-sm p-3 text-sm" style="background:var(--primary);">Yes, it's available. Are you in Bengaluru?</div></div>
+            <div class="flex"><div class="max-w-md bg-white rounded-2xl rounded-tl-sm p-3 text-sm">Yes, in Marathahalli. What's the lowest you can go?</div></div>
+            <div class="flex justify-end"><div class="max-w-md text-white rounded-2xl rounded-tr-sm p-3 text-sm" style="background:var(--primary);">I can do ₹5.10 L if you can come and check tomorrow.</div></div>
+            <div class="flex"><div class="max-w-md bg-white rounded-2xl rounded-tl-sm p-3 text-sm">Can I come for a test drive tomorrow at 11am? I'll bring my licence.</div></div>
+            <div class="flex justify-center"><div class="text-xs text-slate-500 bg-amber-50 border border-amber-200 px-3 py-2 rounded-lg max-w-sm"><i data-lucide="shield-alert" class="text-amber-600"></i> Tip: Meet in a public, daytime location. Never share OTPs.</div></div>
+          </div>
+          <div class="p-3 border-t border-slate-200 flex items-end gap-2">
+            <button class="btn btn-ghost btn-sm"><i data-lucide="paperclip"></i></button>
+            <button class="btn btn-ghost btn-sm"><i data-lucide="image"></i></button>
+            <textarea class="input flex-1 max-h-32" rows="1" placeholder="Type a message…"></textarea>
+            <button class="btn btn-ghost btn-sm"><i data-lucide="mic"></i></button>
+            <button class="btn btn-primary btn-sm"><i data-lucide="send"></i></button>
+          </div>
+        </div>
+
+        <!-- Listing context -->
+        <div class="border-l border-slate-200 p-4 bg-slate-50 overflow-y-auto">
+          <div class="text-xs label">Listing</div>
+          <div class="card overflow-hidden mt-2">
+            <div class="img-ph img-car h-32" data-l="Maruti Swift VXI 2019"></div>
+            <div class="p-3">
+              <div class="price">₹5.25 L</div>
+              <div class="text-sm font-semibold">Maruti Swift VXI 2019</div>
+              <div class="text-xs text-slate-500">Whitefield · Posted 1d ago</div>
+              <button class="btn btn-secondary w-full mt-2 btn-sm" onclick="goto('web-listing')">View listing</button>
+            </div>
+          </div>
+
+          <div class="mt-4 space-y-2 text-sm">
+            <button class="w-full text-left px-3 py-2 rounded-lg hover:bg-white border border-slate-200 flex items-center gap-2"><i data-lucide="tag"></i> Make an offer</button>
+            <button class="w-full text-left px-3 py-2 rounded-lg hover:bg-white border border-slate-200 flex items-center gap-2"><i data-lucide="check-circle"></i> Mark as sold</button>
+            <button class="w-full text-left px-3 py-2 rounded-lg hover:bg-white border border-slate-200 flex items-center gap-2"><i data-lucide="user-minus"></i> Block user</button>
+            <button class="w-full text-left px-3 py-2 rounded-lg hover:bg-white border border-slate-200 flex items-center gap-2 text-red-600"><i data-lucide="flag"></i> Report</button>
+          </div>
+
+          <div class="mt-4 p-3 rounded-lg" style="background:#FFF4EF;border:1px solid #FFE0D2;">
+            <div class="text-xs font-semibold" style="color:var(--accent-700);">Phone privacy on</div>
+            <div class="text-xs text-slate-600 mt-1">Anjali sees a Classifly proxy number, not your real one. You can revoke access anytime.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== JOBS HUB ===================== -->
+<section id="web-jobs" class="screen">
+  <div class="wrap py-6">
+    <div class="flex items-center justify-between mb-4">
+      <div>
+        <h1 class="text-2xl font-bold">Jobs near you <span class="hindi text-base text-slate-500">नौकरियां</span></h1>
+        <div class="text-sm text-slate-500">85,400 openings in Bengaluru · Apply with voice CV in any language</div>
+      </div>
+      <div class="flex gap-2">
+        <button class="btn btn-secondary btn-sm"><i data-lucide="mic"></i> Record voice CV</button>
+        <button class="btn btn-primary"><i data-lucide="file-text"></i> Update resume</button>
+      </div>
+    </div>
+
+    <div class="flex gap-2 mb-5 overflow-x-auto pb-1">
+      <input class="input max-w-md" placeholder="Job title, company, or skill">
+      <select class="input w-auto"><option>All experience</option><option>Fresher (0-1y)</option><option>1-3y</option><option>3-5y</option><option>5+ years</option></select>
+      <select class="input w-auto"><option>Any salary</option><option>₹15K-25K/mo</option><option>₹25K-50K/mo</option><option>₹50K-1L/mo</option><option>₹1L+/mo</option></select>
+      <select class="input w-auto"><option>All work mode</option><option>Onsite</option><option>Hybrid</option><option>Remote</option></select>
+      <select class="input w-auto"><option>All types</option><option>Full-time</option><option>Part-time</option><option>Gig/Blue-collar</option><option>Internship</option></select>
+    </div>
+
+    <div class="flex gap-1.5 mb-5">
+      <span class="chip chip-active">Suggested (124)</span>
+      <span class="chip">Saved (8)</span>
+      <span class="chip">Applied (3)</span>
+      <span class="chip">Walk-ins this week (14)</span>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4">
+      <div class="card p-4">
+        <div class="flex items-start justify-between">
+          <div>
+            <div class="font-bold text-lg">Senior React Developer</div>
+            <div class="text-sm text-slate-600">Razorpay · Bengaluru (Hybrid)</div>
+          </div>
+          <button class="btn-ghost"><i data-lucide="bookmark"></i></button>
+        </div>
+        <div class="flex flex-wrap gap-1.5 mt-3">
+          <span class="badge badge-verified"><i data-lucide="badge-check"></i> Verified employer</span>
+          <span class="badge" style="background:#DCFCE7;color:#15803D;">₹25-40 LPA</span>
+          <span class="chip">React</span><span class="chip">TypeScript</span><span class="chip">Next.js</span>
+        </div>
+        <div class="text-sm text-slate-600 mt-3">3-6 years experience · Full-time · Posted 2 days ago · 142 applicants</div>
+        <div class="flex gap-2 mt-3">
+          <button class="btn btn-primary btn-sm flex-1">Apply with 1 click</button>
+          <button class="btn btn-secondary btn-sm">View</button>
+        </div>
+      </div>
+      <div class="card p-4">
+        <div class="flex items-start justify-between">
+          <div>
+            <div class="font-bold text-lg">Delivery Partner</div>
+            <div class="text-sm text-slate-600">Swiggy · Multiple Bengaluru locations</div>
+          </div>
+          <button class="btn-ghost"><i data-lucide="bookmark"></i></button>
+        </div>
+        <div class="flex flex-wrap gap-1.5 mt-3">
+          <span class="badge badge-urgent">Hiring urgently</span>
+          <span class="badge" style="background:#DCFCE7;color:#15803D;">₹25-40K/month</span>
+          <span class="chip">Bike required</span><span class="chip">Smartphone</span>
+        </div>
+        <div class="text-sm text-slate-600 mt-3">No experience needed · Gig · Posted today · Walk-in interview</div>
+        <div class="flex gap-2 mt-3">
+          <button class="btn btn-accent btn-sm flex-1"><i data-lucide="mic"></i> Apply with voice CV</button>
+          <button class="btn btn-secondary btn-sm">View</button>
+        </div>
+      </div>
+      <div class="card p-4">
+        <div class="flex items-start justify-between">
+          <div>
+            <div class="font-bold text-lg">Cashier / Store Assistant</div>
+            <div class="text-sm text-slate-600">DMart · HSR Layout</div>
+          </div>
+          <button class="btn-ghost"><i data-lucide="bookmark"></i></button>
+        </div>
+        <div class="flex flex-wrap gap-1.5 mt-3">
+          <span class="badge badge-verified"><i data-lucide="badge-check"></i> Verified</span>
+          <span class="badge" style="background:#DCFCE7;color:#15803D;">₹18-22K/month</span>
+          <span class="chip">10th pass</span><span class="chip">Hindi/Kannada</span>
+        </div>
+        <div class="text-sm text-slate-600 mt-3">Freshers welcome · Full-time · Posted 1d ago · 56 applicants</div>
+        <div class="flex gap-2 mt-3">
+          <button class="btn btn-accent btn-sm flex-1"><i data-lucide="mic"></i> Apply with voice CV</button>
+          <button class="btn btn-secondary btn-sm">View</button>
+        </div>
+      </div>
+      <div class="card p-4">
+        <div class="flex items-start justify-between">
+          <div>
+            <div class="font-bold text-lg">Backend Engineer (Java)</div>
+            <div class="text-sm text-slate-600">Flipkart · Bengaluru (Onsite)</div>
+          </div>
+          <button class="btn-ghost"><i data-lucide="bookmark"></i></button>
+        </div>
+        <div class="flex flex-wrap gap-1.5 mt-3">
+          <span class="badge badge-verified"><i data-lucide="badge-check"></i> Verified employer</span>
+          <span class="badge" style="background:#DCFCE7;color:#15803D;">₹30-55 LPA</span>
+          <span class="chip">Java</span><span class="chip">Spring Boot</span><span class="chip">Kafka</span><span class="chip">AWS</span>
+        </div>
+        <div class="text-sm text-slate-600 mt-3">4-8 years · Full-time · Posted 3 days ago · 287 applicants</div>
+        <div class="flex gap-2 mt-3">
+          <button class="btn btn-primary btn-sm flex-1">Apply with 1 click</button>
+          <button class="btn btn-secondary btn-sm">View</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SERVICES HUB ===================== -->
+<section id="web-services" class="screen">
+  <div class="wrap py-6">
+    <div class="flex items-center justify-between mb-5">
+      <div>
+        <h1 class="text-2xl font-bold">Services in Bengaluru</h1>
+        <div class="text-sm text-slate-500">Verified pros · Same-day quotes · Book in 30 seconds</div>
+      </div>
+      <button class="btn btn-primary"><i data-lucide="plus"></i> Become a pro</button>
+    </div>
+
+    <div class="grid grid-cols-6 gap-3 mb-6">
+      <button class="card p-4 text-center hover:shadow-md">
+        <div class="img-ph img-plumb w-12 h-12 rounded-lg mx-auto" data-l=""></div>
+        <div class="font-semibold mt-2 text-sm">Plumber</div>
+      </button>
+      <button class="card p-4 text-center hover:shadow-md">
+        <div class="img-ph img-electr w-12 h-12 rounded-lg mx-auto" data-l=""></div>
+        <div class="font-semibold mt-2 text-sm">Electrician</div>
+      </button>
+      <button class="card p-4 text-center hover:shadow-md">
+        <div class="img-ph img-tutor w-12 h-12 rounded-lg mx-auto" data-l=""></div>
+        <div class="font-semibold mt-2 text-sm">Tutor</div>
+      </button>
+      <button class="card p-4 text-center hover:shadow-md">
+        <div class="img-ph img-sofa w-12 h-12 rounded-lg mx-auto" data-l=""></div>
+        <div class="font-semibold mt-2 text-sm">Movers</div>
+      </button>
+      <button class="card p-4 text-center hover:shadow-md">
+        <div class="img-ph img-flat w-12 h-12 rounded-lg mx-auto" data-l=""></div>
+        <div class="font-semibold mt-2 text-sm">Cleaning</div>
+      </button>
+      <button class="card p-4 text-center hover:shadow-md">
+        <div class="img-ph img-watch w-12 h-12 rounded-lg mx-auto" data-l=""></div>
+        <div class="font-semibold mt-2 text-sm">Beauty</div>
+      </button>
+    </div>
+
+    <h2 class="font-bold text-lg mb-3">Top-rated pros near you</h2>
+    <div class="grid grid-cols-3 gap-4">
+      <div class="card p-4">
+        <div class="flex items-center gap-3">
+          <span class="avatar w-12 h-12" style="background:#0369A1;">R</span>
+          <div class="flex-1">
+            <div class="font-bold">Rajesh Plumbing Works</div>
+            <div class="text-xs text-slate-500">Indiranagar · 4.2 km away</div>
+          </div>
+        </div>
+        <div class="flex flex-wrap gap-1.5 mt-3">
+          <span class="badge badge-verified"><i data-lucide="badge-check"></i> Verified Pro</span>
+          <span class="badge" style="background:#FEF3C7;color:#A16207;"><i data-lucide="star"></i> 4.9 (218)</span>
+          <span class="badge" style="background:#DBEAFE;color:#1E40AF;">Responds in 15 min</span>
+        </div>
+        <div class="text-sm text-slate-600 mt-3">12 years experience · ₹350 visit charge · Insured</div>
+        <div class="flex gap-2 mt-3">
+          <button class="btn btn-primary btn-sm flex-1"><i data-lucide="calendar"></i> Book now</button>
+          <button class="btn btn-secondary btn-sm">Get quote</button>
+        </div>
+      </div>
+      <div class="card p-4">
+        <div class="flex items-center gap-3">
+          <span class="avatar w-12 h-12" style="background:#15803D;">S</span>
+          <div class="flex-1">
+            <div class="font-bold">Sunita's Home Cleaning</div>
+            <div class="text-xs text-slate-500">HSR Layout · 2.8 km away</div>
+          </div>
+        </div>
+        <div class="flex flex-wrap gap-1.5 mt-3">
+          <span class="badge badge-verified"><i data-lucide="badge-check"></i> Verified Pro</span>
+          <span class="badge" style="background:#FEF3C7;color:#A16207;"><i data-lucide="star"></i> 4.8 (412)</span>
+          <span class="badge" style="background:#DCFCE7;color:#15803D;">Same-day available</span>
+        </div>
+        <div class="text-sm text-slate-600 mt-3">Team of 5 · From ₹699 · Full home deep clean</div>
+        <div class="flex gap-2 mt-3">
+          <button class="btn btn-primary btn-sm flex-1"><i data-lucide="calendar"></i> Book now</button>
+          <button class="btn btn-secondary btn-sm">Get quote</button>
+        </div>
+      </div>
+      <div class="card p-4">
+        <div class="flex items-center gap-3">
+          <span class="avatar w-12 h-12" style="background:#C24016;">M</span>
+          <div class="flex-1">
+            <div class="font-bold">Math Tutor — Mr. Mehta</div>
+            <div class="text-xs text-slate-500">Online + Koramangala · CBSE/ICSE Class 8-12</div>
+          </div>
+        </div>
+        <div class="flex flex-wrap gap-1.5 mt-3">
+          <span class="badge badge-verified"><i data-lucide="badge-check"></i> Verified Pro</span>
+          <span class="badge" style="background:#FEF3C7;color:#A16207;"><i data-lucide="star"></i> 4.95 (89)</span>
+        </div>
+        <div class="text-sm text-slate-600 mt-3">B.Tech IIT-Bombay · ₹800/hour · First class free</div>
+        <div class="flex gap-2 mt-3">
+          <button class="btn btn-primary btn-sm flex-1"><i data-lucide="calendar"></i> Book demo</button>
+          <button class="btn btn-secondary btn-sm">Chat</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ============================================================ -->
+<!-- =================== MOBILE VIEW ============================ -->
+<!-- ============================================================ -->
+<main id="mobileRoot" class="pt-20 pb-12" style="display:none;">
+  <div class="text-center text-sm text-slate-500 mb-4">Flutter mobile · 390 × 844 (iPhone-class)</div>
+
+  <!-- ----- MOBILE HOME ----- -->
+  <section id="mob-home" class="screen active">
+    <div class="phone"><div class="phone-screen">
+      <div class="phone-status"><span>9:41</span><span>● ● ●</span></div>
+      <div class="phone-content">
+        <!-- Top bar -->
+        <div class="px-4 pt-3 pb-2 flex items-center gap-2">
+          <button class="chip"><i data-lucide="map-pin"></i> Bengaluru</button>
+          <div class="flex-1"></div>
+          <button class="relative"><i data-lucide="bell"></i><span class="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span></button>
+          <span class="avatar w-8 h-8 text-xs">R</span>
+        </div>
+        <!-- Search -->
+        <div class="px-4 mt-1 relative">
+          <input class="input pl-9" placeholder="Search Classifly">
+          <i data-lucide="search" class="absolute left-7 top-2.5 text-slate-400"></i>
+          <button class="absolute right-7 top-2 p-1.5 rounded-lg" style="background:var(--primary);color:#fff;"><i data-lucide="mic" class="w-4 h-4"></i></button>
+        </div>
+        <!-- Vertical pills -->
+        <div class="px-4 mt-3 flex gap-1.5 overflow-x-auto">
+          <span class="chip chip-active">All</span>
+          <span class="chip">Buy/Sell</span>
+          <span class="chip">Jobs</span>
+          <span class="chip">Services</span>
+          <span class="chip">Rentals</span>
+        </div>
+        <!-- Featured strip -->
+        <div class="mt-4">
+          <div class="px-4 flex items-center justify-between mb-2">
+            <div class="font-bold text-sm">Featured</div>
+            <span class="text-xs" style="color:var(--primary);">See all →</span>
+          </div>
+          <div class="scroll-row flex gap-3 px-4">
+            <div class="w-44 card overflow-hidden">
+              <div class="img-ph img-car h-28" data-l=""></div>
+              <div class="p-2"><div class="price text-sm">₹5.25 L</div><div class="text-xs font-semibold truncate">Maruti Swift VXI 2019</div></div>
+            </div>
+            <div class="w-44 card overflow-hidden">
+              <div class="img-ph img-mobile h-28" data-l=""></div>
+              <div class="p-2"><div class="price text-sm">₹62,000</div><div class="text-xs font-semibold truncate">iPhone 13 Pro 128GB</div></div>
+            </div>
+            <div class="w-44 card overflow-hidden">
+              <div class="img-ph img-flat h-28" data-l=""></div>
+              <div class="p-2"><div class="price text-sm">₹35K/mo</div><div class="text-xs font-semibold truncate">2 BHK · HSR Layout</div></div>
+            </div>
+          </div>
+        </div>
+        <!-- Categories grid -->
+        <div class="px-4 mt-5">
+          <div class="font-bold text-sm mb-2">Browse categories</div>
+          <div class="grid grid-cols-4 gap-3">
+            <button class="card p-2 text-center">
+              <div class="img-ph img-mobile w-10 h-10 rounded-lg mx-auto" data-l=""></div>
+              <div class="text-[11px] font-semibold mt-1">Mobiles</div>
+            </button>
+            <button class="card p-2 text-center">
+              <div class="img-ph img-car w-10 h-10 rounded-lg mx-auto" data-l=""></div>
+              <div class="text-[11px] font-semibold mt-1">Vehicles</div>
+            </button>
+            <button class="card p-2 text-center">
+              <div class="img-ph img-flat w-10 h-10 rounded-lg mx-auto" data-l=""></div>
+              <div class="text-[11px] font-semibold mt-1">Property</div>
+            </button>
+            <button class="card p-2 text-center">
+              <div class="img-ph img-sofa w-10 h-10 rounded-lg mx-auto" data-l=""></div>
+              <div class="text-[11px] font-semibold mt-1">Home</div>
+            </button>
+            <button class="card p-2 text-center">
+              <div class="img-ph img-laptop w-10 h-10 rounded-lg mx-auto" data-l=""></div>
+              <div class="text-[11px] font-semibold mt-1">Electronics</div>
+            </button>
+            <button class="card p-2 text-center">
+              <div class="img-ph img-bike w-10 h-10 rounded-lg mx-auto" data-l=""></div>
+              <div class="text-[11px] font-semibold mt-1">Jobs</div>
+            </button>
+            <button class="card p-2 text-center">
+              <div class="img-ph img-plumb w-10 h-10 rounded-lg mx-auto" data-l=""></div>
+              <div class="text-[11px] font-semibold mt-1">Services</div>
+            </button>
+            <button class="card p-2 text-center">
+              <div class="img-ph img-cycle w-10 h-10 rounded-lg mx-auto" data-l=""></div>
+              <div class="text-[11px] font-semibold mt-1">Sports</div>
+            </button>
+          </div>
+        </div>
+        <!-- Near you -->
+        <div class="px-4 mt-5 mb-4">
+          <div class="font-bold text-sm mb-2">Near you · 5 km</div>
+          <div class="space-y-3">
+            <button class="card overflow-hidden w-full flex" onclick="goto('mob-listing')">
+              <div class="img-ph img-car w-32 h-24" data-l=""></div>
+              <div class="p-2 flex-1 text-left">
+                <div class="price text-sm">₹5.25 L</div>
+                <div class="text-xs font-semibold truncate">Maruti Swift VXI 2019</div>
+                <div class="text-[11px] text-slate-500 mt-0.5">Whitefield · 1d ago</div>
+                <span class="badge badge-verified mt-1"><i data-lucide="badge-check"></i> Verified</span>
+              </div>
+            </button>
+            <button class="card overflow-hidden w-full flex" onclick="goto('mob-listing')">
+              <div class="img-ph img-mobile w-32 h-24" data-l=""></div>
+              <div class="p-2 flex-1 text-left">
+                <div class="price text-sm">₹28,500</div>
+                <div class="text-xs font-semibold truncate">OnePlus 11R 256GB</div>
+                <div class="text-[11px] text-slate-500 mt-0.5">Koramangala · 1d ago</div>
+              </div>
+            </button>
+            <button class="card overflow-hidden w-full flex">
+              <div class="img-ph img-flat w-32 h-24" data-l=""></div>
+              <div class="p-2 flex-1 text-left">
+                <div class="price text-sm">₹18,000/mo</div>
+                <div class="text-xs font-semibold truncate">1 BHK Furnished · Metro</div>
+                <div class="text-[11px] text-slate-500 mt-0.5">Indiranagar · 2d ago</div>
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- Bottom nav -->
+      <div class="phone-nav">
+        <button class="active"><i data-lucide="home"></i><span>Home</span></button>
+        <button onclick="goto('mob-search')"><i data-lucide="search"></i><span>Search</span></button>
+        <span></span>
+        <button onclick="goto('mob-chat')"><i data-lucide="message-circle"></i><span>Chat</span></button>
+        <button onclick="goto('mob-profile')"><i data-lucide="user"></i><span>Profile</span></button>
+        <button class="phone-fab" onclick="goto('mob-postad')"><i data-lucide="plus"></i></button>
+      </div>
+    </div></div>
+  </section>
+
+  <!-- ----- MOBILE SEARCH ----- -->
+  <section id="mob-search" class="screen">
+    <div class="phone"><div class="phone-screen">
+      <div class="phone-status"><span>9:41</span><span>● ● ●</span></div>
+      <div class="phone-content">
+        <div class="px-4 pt-3 pb-2 flex items-center gap-2">
+          <button onclick="goto('mob-home')"><i data-lucide="arrow-left"></i></button>
+          <div class="flex-1 relative">
+            <input class="input pl-8 py-2 text-sm" value="Maruti Swift">
+            <i data-lucide="search" class="absolute left-2 top-2.5 text-slate-400 w-4 h-4"></i>
+          </div>
+          <button><i data-lucide="sliders-horizontal" style="color:var(--primary);"></i></button>
+        </div>
+        <!-- Active filters -->
+        <div class="px-4 pb-2 flex gap-1.5 overflow-x-auto">
+          <span class="chip chip-active">Cars ×</span>
+          <span class="chip chip-active">₹3-7 L ×</span>
+          <span class="chip chip-active">Petrol ×</span>
+          <span class="chip chip-active">Within 25 km ×</span>
+          <span class="chip">+ Add</span>
+        </div>
+        <div class="px-4 pb-2 text-xs text-slate-500 flex justify-between items-center">
+          <span>8,432 results</span>
+          <span>Sort: Newest ▾</span>
+        </div>
+        <div class="px-4 pb-4 space-y-3">
+          <button class="card overflow-hidden w-full text-left" onclick="goto('mob-listing')">
+            <div class="img-ph img-car h-36 relative" data-l=""><span class="absolute top-2 left-2 badge badge-featured">Featured</span></div>
+            <div class="p-3">
+              <div class="flex items-center justify-between"><div class="price">₹5.25 L</div><button><i data-lucide="bookmark" class="w-4 h-4"></i></button></div>
+              <div class="font-semibold text-sm">Maruti Swift VXI 2019 — Single owner</div>
+              <div class="text-xs text-slate-500 mt-1">45,000 km · Petrol · 1st owner</div>
+              <div class="text-xs text-slate-500 mt-0.5">Whitefield · 1d ago</div>
+              <span class="badge badge-verified mt-1"><i data-lucide="badge-check"></i> Verified</span>
+            </div>
+          </button>
+          <button class="card overflow-hidden w-full text-left" onclick="goto('mob-listing')">
+            <div class="img-ph img-car h-36" data-l=""></div>
+            <div class="p-3">
+              <div class="flex items-center justify-between"><div class="price">₹4.10 L</div><button><i data-lucide="bookmark" class="w-4 h-4"></i></button></div>
+              <div class="font-semibold text-sm">Swift Dzire ZXI 2017</div>
+              <div class="text-xs text-slate-500 mt-1">62,000 km · Diesel · 2nd owner</div>
+              <div class="text-xs text-slate-500 mt-0.5">HSR Layout · 2d ago</div>
+            </div>
+          </button>
+          <button class="card overflow-hidden w-full text-left" onclick="goto('mob-listing')">
+            <div class="img-ph img-car h-36 relative" data-l=""><span class="absolute top-2 left-2 badge badge-urgent">Urgent</span></div>
+            <div class="p-3">
+              <div class="flex items-center justify-between"><div class="price">₹6.40 L</div><button><i data-lucide="bookmark" class="w-4 h-4"></i></button></div>
+              <div class="font-semibold text-sm">Maruti Swift ZXI 2021</div>
+              <div class="text-xs text-slate-500 mt-1">22,000 km · Petrol · 1st owner</div>
+              <div class="text-xs text-slate-500 mt-0.5">Marathahalli · 3d ago</div>
+              <span class="badge badge-verified mt-1"><i data-lucide="badge-check"></i> Verified</span>
+            </div>
+          </button>
+        </div>
+      </div>
+      <div class="phone-nav">
+        <button onclick="goto('mob-home')"><i data-lucide="home"></i><span>Home</span></button>
+        <button class="active"><i data-lucide="search"></i><span>Search</span></button>
+        <span></span>
+        <button onclick="goto('mob-chat')"><i data-lucide="message-circle"></i><span>Chat</span></button>
+        <button onclick="goto('mob-profile')"><i data-lucide="user"></i><span>Profile</span></button>
+        <button class="phone-fab" onclick="goto('mob-postad')"><i data-lucide="plus"></i></button>
+      </div>
+    </div></div>
+  </section>
+
+  <!-- ----- MOBILE LISTING DETAIL ----- -->
+  <section id="mob-listing" class="screen">
+    <div class="phone"><div class="phone-screen">
+      <div class="phone-status"><span>9:41</span><span>● ● ●</span></div>
+      <div class="phone-content relative">
+        <!-- Back / share buttons over image -->
+        <div class="absolute top-3 left-3 z-10"><button class="bg-white/90 rounded-full p-2" onclick="goto('mob-search')"><i data-lucide="arrow-left"></i></button></div>
+        <div class="absolute top-3 right-3 z-10 flex gap-2">
+          <button class="bg-white/90 rounded-full p-2"><i data-lucide="bookmark"></i></button>
+          <button class="bg-white/90 rounded-full p-2"><i data-lucide="share-2"></i></button>
+        </div>
+        <div class="img-ph img-car h-72 relative" data-l="">
+          <div class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
+            <span class="w-1.5 h-1.5 rounded-full bg-white"></span>
+            <span class="w-1.5 h-1.5 rounded-full bg-white/50"></span>
+            <span class="w-1.5 h-1.5 rounded-full bg-white/50"></span>
+            <span class="w-1.5 h-1.5 rounded-full bg-white/50"></span>
+          </div>
+          <span class="absolute bottom-3 right-3 bg-black/60 text-white text-xs rounded-full px-2 py-1">1/8</span>
+        </div>
+
+        <div class="px-4 pt-3 pb-3 bg-white">
+          <div class="flex items-center gap-1.5">
+            <span class="badge badge-featured">Featured</span>
+            <span class="badge badge-verified"><i data-lucide="badge-check"></i> Verified</span>
+          </div>
+          <div class="flex items-baseline justify-between mt-2">
+            <div class="price text-2xl">₹5,25,000</div>
+            <span class="text-xs" style="background:#FEF3C7;color:#A16207;padding:2px 8px;border-radius:6px;">Negotiable</span>
+          </div>
+          <div class="font-bold mt-1">Maruti Swift VXI 2019 — Single owner</div>
+          <div class="text-xs text-slate-500 mt-1 flex items-center gap-2">
+            <span><i data-lucide="map-pin" class="w-3 h-3"></i> Whitefield, Bengaluru</span>
+            <span>·</span>
+            <span><i data-lucide="clock" class="w-3 h-3"></i> 1d ago</span>
+          </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="px-4 bg-white border-t border-slate-100 flex gap-4 text-sm">
+          <button class="py-3 font-semibold border-b-2" style="border-color:var(--primary);color:var(--primary);">Details</button>
+          <button class="py-3 text-slate-500">Description</button>
+          <button class="py-3 text-slate-500">Seller</button>
+        </div>
+
+        <div class="px-4 py-3 bg-white space-y-2 text-sm">
+          <div class="flex justify-between"><span class="text-slate-500">Brand</span><span class="font-semibold">Maruti Suzuki</span></div>
+          <div class="flex justify-between"><span class="text-slate-500">Year</span><span class="font-semibold">2019</span></div>
+          <div class="flex justify-between"><span class="text-slate-500">KM driven</span><span class="font-semibold">45,000 km</span></div>
+          <div class="flex justify-between"><span class="text-slate-500">Fuel</span><span class="font-semibold">Petrol</span></div>
+          <div class="flex justify-between"><span class="text-slate-500">Transmission</span><span class="font-semibold">Manual</span></div>
+          <div class="flex justify-between"><span class="text-slate-500">Owners</span><span class="font-semibold">1st</span></div>
+          <div class="flex justify-between"><span class="text-slate-500">Insurance</span><span class="font-semibold">Valid till Mar 2026</span></div>
+        </div>
+
+        <!-- Seller mini-card -->
+        <div class="mx-4 my-3 card p-3 flex items-center gap-3">
+          <span class="avatar w-10 h-10">R</span>
+          <div class="flex-1">
+            <div class="font-semibold text-sm">Rohit Sharma</div>
+            <div class="text-xs text-slate-500">Member since Feb 2024 · 48 sold</div>
+            <div class="flex gap-1 mt-1">
+              <span class="badge badge-kyc">KYC 2</span>
+              <span class="badge" style="background:#FEF3C7;color:#A16207;">★ 4.8</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mx-4 mb-24 p-3 rounded-lg text-xs" style="background:#FFF4EF;border:1px solid #FFE0D2;color:#7A2509;">
+          <b>Safety tip:</b> Meet in a public daytime location. Never share OTPs. Use escrow for high-value deals.
+        </div>
+      </div>
+
+      <!-- Sticky bottom action bar -->
+      <div style="position:absolute;bottom:74px;left:0;right:0;padding:10px 16px;background:#fff;border-top:1px solid var(--n200);display:flex;gap:8px;">
+        <button class="btn btn-secondary flex-1"><i data-lucide="phone"></i> Call</button>
+        <button class="btn btn-primary flex-1" onclick="goto('mob-chat')"><i data-lucide="message-circle"></i> Chat</button>
+      </div>
+
+      <div class="phone-nav">
+        <button onclick="goto('mob-home')"><i data-lucide="home"></i><span>Home</span></button>
+        <button onclick="goto('mob-search')"><i data-lucide="search"></i><span>Search</span></button>
+        <span></span>
+        <button onclick="goto('mob-chat')"><i data-lucide="message-circle"></i><span>Chat</span></button>
+        <button onclick="goto('mob-profile')"><i data-lucide="user"></i><span>Profile</span></button>
+        <button class="phone-fab" onclick="goto('mob-postad')"><i data-lucide="plus"></i></button>
+      </div>
+    </div></div>
+  </section>
+
+  <!-- ----- MOBILE POST-AD ----- -->
+  <section id="mob-postad" class="screen">
+    <div class="phone"><div class="phone-screen">
+      <div class="phone-status"><span>9:41</span><span>● ● ●</span></div>
+      <div class="phone-content">
+        <div class="px-4 pt-3 pb-2 flex items-center gap-3 bg-white border-b border-slate-100">
+          <button onclick="goto('mob-home')"><i data-lucide="x"></i></button>
+          <div class="flex-1">
+            <div class="font-bold text-sm">Post your ad</div>
+            <div class="text-xs text-slate-500">Step 3 of 4 · Photos</div>
+          </div>
+          <button class="text-sm font-semibold" style="color:var(--primary);">Save</button>
+        </div>
+        <!-- Progress -->
+        <div class="h-1 bg-slate-200"><div class="h-full" style="width:75%;background:var(--primary);"></div></div>
+        <div class="p-4">
+          <h3 class="font-bold text-lg">Add photos</h3>
+          <p class="text-xs text-slate-500 mt-1">Up to 10 photos. First photo will be the cover. Hold and drag to reorder.</p>
+
+          <div class="grid grid-cols-3 gap-2 mt-3">
+            <div class="aspect-square rounded-lg img-ph img-car relative" data-l="Cover">
+              <span class="absolute top-1 left-1 bg-white text-[10px] font-bold px-1.5 py-0.5 rounded">COVER</span>
+              <button class="absolute top-1 right-1 bg-black/60 rounded-full p-1"><i data-lucide="x" class="w-3 h-3 text-white"></i></button>
+            </div>
+            <div class="aspect-square rounded-lg img-ph img-car" data-l=""></div>
+            <div class="aspect-square rounded-lg img-ph img-car" data-l=""></div>
+            <div class="aspect-square rounded-lg img-ph img-car" data-l=""></div>
+            <button class="aspect-square rounded-lg border-2 border-dashed border-slate-300 flex flex-col items-center justify-center text-slate-500 text-xs">
+              <i data-lucide="camera" class="mb-1"></i> Take photo
+            </button>
+            <button class="aspect-square rounded-lg border-2 border-dashed border-slate-300 flex flex-col items-center justify-center text-slate-500 text-xs">
+              <i data-lucide="image" class="mb-1"></i> Gallery
+            </button>
+          </div>
+
+          <div class="card p-3 mt-4 text-xs" style="background:#F0F4F9;border-color:#D9E2EE;">
+            <div class="flex items-start gap-2">
+              <i data-lucide="info" style="color:var(--primary);"></i>
+              <div>
+                <div class="font-semibold" style="color:var(--primary);">Tips for great photos</div>
+                <ul class="text-slate-600 mt-1 space-y-0.5">
+                  <li>• Use natural daylight</li>
+                  <li>• Show front, sides, interior, dashboard</li>
+                  <li>• Wipe down before photographing</li>
+                  <li>• Avoid blurry / dark photos</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="card p-3 mt-3 flex items-center gap-3">
+            <i data-lucide="shield-check" style="color:var(--success);"></i>
+            <div class="text-xs flex-1">
+              <div class="font-semibold">AI photo check</div>
+              <div class="text-slate-500">Auto-removes phone numbers, watermarks, and explicit content from photos.</div>
+            </div>
+            <div class="w-9 h-5 bg-green-500 rounded-full relative"><span class="absolute right-0.5 top-0.5 w-4 h-4 bg-white rounded-full"></span></div>
+          </div>
+        </div>
+      </div>
+      <div style="position:absolute;bottom:74px;left:0;right:0;padding:10px 16px;background:#fff;border-top:1px solid var(--n200);display:flex;gap:8px;">
+        <button class="btn btn-secondary flex-1">Back</button>
+        <button class="btn btn-primary flex-[2]">Next: Price &amp; location</button>
+      </div>
+      <div class="phone-nav">
+        <button onclick="goto('mob-home')"><i data-lucide="home"></i><span>Home</span></button>
+        <button onclick="goto('mob-search')"><i data-lucide="search"></i><span>Search</span></button>
+        <span></span>
+        <button onclick="goto('mob-chat')"><i data-lucide="message-circle"></i><span>Chat</span></button>
+        <button onclick="goto('mob-profile')"><i data-lucide="user"></i><span>Profile</span></button>
+        <button class="phone-fab active" onclick="goto('mob-postad')"><i data-lucide="plus"></i></button>
+      </div>
+    </div></div>
+  </section>
+
+  <!-- ----- MOBILE CHAT ----- -->
+  <section id="mob-chat" class="screen">
+    <div class="phone"><div class="phone-screen">
+      <div class="phone-status"><span>9:41</span><span>● ● ●</span></div>
+      <div class="phone-content">
+        <!-- Header with listing context -->
+        <div class="bg-white">
+          <div class="px-3 pt-3 pb-2 flex items-center gap-3">
+            <button onclick="goto('mob-listing')"><i data-lucide="arrow-left"></i></button>
+            <span class="avatar w-9 h-9 text-xs">A</span>
+            <div class="flex-1 min-w-0">
+              <div class="font-bold text-sm truncate">Anjali Reddy <span class="badge badge-kyc"><i data-lucide="badge-check"></i></span></div>
+              <div class="text-[11px] text-slate-500"><span class="inline-block w-1.5 h-1.5 rounded-full bg-green-500"></span> Online</div>
+            </div>
+            <button><i data-lucide="phone"></i></button>
+            <button><i data-lucide="more-vertical"></i></button>
+          </div>
+          <div class="mx-3 mb-2 card p-2 flex items-center gap-2">
+            <div class="img-ph img-car w-10 h-10 rounded" data-l=""></div>
+            <div class="flex-1 min-w-0">
+              <div class="text-[11px] text-slate-500 truncate">Maruti Swift VXI 2019</div>
+              <div class="text-sm font-bold price">₹5,25,000</div>
+            </div>
+            <button class="text-xs font-semibold px-2 py-1 rounded" style="background:var(--primary-50);color:var(--primary);">View</button>
+          </div>
+        </div>
+
+        <div class="px-3 py-3 space-y-2 bg-slate-50 flex-1">
+          <div class="text-center text-[11px] text-slate-500"><span class="bg-white px-2 py-0.5 rounded-full">Today</span></div>
+          <div class="flex"><div class="max-w-[70%] bg-white rounded-2xl rounded-tl-sm p-2.5 text-sm">Hi! Is the Swift still available?</div></div>
+          <div class="flex justify-end"><div class="max-w-[70%] text-white rounded-2xl rounded-tr-sm p-2.5 text-sm" style="background:var(--primary);">Yes, it's available. Are you in Bengaluru?</div></div>
+          <div class="flex"><div class="max-w-[70%] bg-white rounded-2xl rounded-tl-sm p-2.5 text-sm">Yes, in Marathahalli. Lowest price?</div></div>
+          <div class="flex justify-end"><div class="max-w-[70%] text-white rounded-2xl rounded-tr-sm p-2.5 text-sm" style="background:var(--primary);">₹5.10 L if you can come tomorrow.</div></div>
+          <div class="flex"><div class="max-w-[70%] bg-white rounded-2xl rounded-tl-sm p-2.5 text-sm">Test drive tomorrow at 11am? I'll bring my licence 👍</div></div>
+          <div class="flex justify-center"><div class="text-[11px] text-amber-800 bg-amber-50 border border-amber-200 px-2 py-1.5 rounded-lg max-w-[80%] text-center">Meet in a public daytime location. Never share OTPs.</div></div>
+        </div>
+
+      </div>
+      <!-- Input bar above nav -->
+      <div style="position:absolute;bottom:74px;left:0;right:0;padding:8px 12px;background:#fff;border-top:1px solid var(--n200);display:flex;align-items:center;gap:6px;">
+        <button class="text-slate-500"><i data-lucide="plus-circle"></i></button>
+        <input class="input flex-1 py-2 text-sm" placeholder="Message">
+        <button class="text-slate-500"><i data-lucide="mic"></i></button>
+        <button class="btn btn-primary btn-sm"><i data-lucide="send"></i></button>
+      </div>
+      <div class="phone-nav">
+        <button onclick="goto('mob-home')"><i data-lucide="home"></i><span>Home</span></button>
+        <button onclick="goto('mob-search')"><i data-lucide="search"></i><span>Search</span></button>
+        <span></span>
+        <button class="active"><i data-lucide="message-circle"></i><span>Chat</span></button>
+        <button onclick="goto('mob-profile')"><i data-lucide="user"></i><span>Profile</span></button>
+        <button class="phone-fab" onclick="goto('mob-postad')"><i data-lucide="plus"></i></button>
+      </div>
+    </div></div>
+  </section>
+
+  <!-- ----- MOBILE PROFILE ----- -->
+  <section id="mob-profile" class="screen">
+    <div class="phone"><div class="phone-screen">
+      <div class="phone-status"><span>9:41</span><span>● ● ●</span></div>
+      <div class="phone-content">
+        <!-- Header -->
+        <div style="background:var(--primary);" class="px-4 pt-3 pb-5 text-white">
+          <div class="flex justify-between items-center"><div class="font-bold">Profile</div><button><i data-lucide="settings" class="w-5 h-5"></i></button></div>
+          <div class="flex items-center gap-3 mt-4">
+            <span class="avatar w-16 h-16 text-xl" style="background:#fff;color:var(--primary);">R</span>
+            <div class="flex-1">
+              <div class="font-bold">Rohit Sharma</div>
+              <div class="text-xs opacity-80">Bengaluru · Joined Feb 2024</div>
+              <div class="flex gap-1 mt-1.5">
+                <span class="badge" style="background:rgba(255,255,255,0.2);color:#fff;"><i data-lucide="badge-check"></i> KYC 2</span>
+                <span class="badge" style="background:rgba(255,255,255,0.2);color:#fff;">★ 4.8</span>
+              </div>
+            </div>
+            <button class="bg-white/20 backdrop-blur rounded-lg px-3 py-1.5 text-xs font-semibold">Edit</button>
+          </div>
+        </div>
+
+        <!-- KYC progress card overlapping -->
+        <div class="mx-4 -mt-3 card p-3 flex items-center gap-3" style="background:#fff;">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center" style="background:#FFF4EF;color:var(--accent);"><i data-lucide="badge-check"></i></div>
+          <div class="flex-1">
+            <div class="text-sm font-semibold">Verify Aadhaar to unlock escrow</div>
+            <div class="h-1.5 bg-slate-200 rounded-full mt-1.5"><div class="h-full bg-orange-500 rounded-full" style="width:66%;"></div></div>
+            <div class="text-[11px] text-slate-500 mt-0.5">2 of 3 done · Tier 2 → Tier 3</div>
+          </div>
+          <i data-lucide="chevron-right" class="text-slate-400"></i>
+        </div>
+
+        <!-- Action grid -->
+        <div class="grid grid-cols-3 gap-3 px-4 mt-4">
+          <button class="card p-3 text-center">
+            <i data-lucide="package" class="mb-1" style="color:var(--primary);"></i>
+            <div class="text-xs font-semibold">My ads</div>
+            <div class="text-[10px] text-slate-500">12 active</div>
+          </button>
+          <button class="card p-3 text-center">
+            <i data-lucide="bookmark" class="mb-1" style="color:var(--primary);"></i>
+            <div class="text-xs font-semibold">Saved</div>
+            <div class="text-[10px] text-slate-500">34 items</div>
+          </button>
+          <button class="card p-3 text-center">
+            <i data-lucide="wallet" class="mb-1" style="color:var(--primary);"></i>
+            <div class="text-xs font-semibold">Wallet</div>
+            <div class="text-[10px] text-slate-500">₹250</div>
+          </button>
+          <button class="card p-3 text-center">
+            <i data-lucide="star" class="mb-1" style="color:var(--primary);"></i>
+            <div class="text-xs font-semibold">Reviews</div>
+            <div class="text-[10px] text-slate-500">32 rec'd</div>
+          </button>
+          <button class="card p-3 text-center">
+            <i data-lucide="rocket" class="mb-1" style="color:var(--primary);"></i>
+            <div class="text-xs font-semibold">Boost</div>
+            <div class="text-[10px] text-slate-500">3 packs</div>
+          </button>
+          <button class="card p-3 text-center">
+            <i data-lucide="help-circle" class="mb-1" style="color:var(--primary);"></i>
+            <div class="text-xs font-semibold">Help</div>
+            <div class="text-[10px] text-slate-500">FAQ</div>
+          </button>
+        </div>
+
+        <!-- Settings list -->
+        <div class="mx-4 mt-4 card divide-y divide-slate-200">
+          <button class="w-full flex items-center gap-3 p-3 text-sm">
+            <i data-lucide="languages" class="text-slate-500"></i>
+            <span class="flex-1 text-left">Language</span>
+            <span class="text-slate-500 text-xs">English ▾</span>
+          </button>
+          <button class="w-full flex items-center gap-3 p-3 text-sm">
+            <i data-lucide="zap" class="text-slate-500"></i>
+            <span class="flex-1 text-left">Low-data mode</span>
+            <div class="w-9 h-5 bg-slate-200 rounded-full relative"><span class="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full shadow"></span></div>
+          </button>
+          <button class="w-full flex items-center gap-3 p-3 text-sm">
+            <i data-lucide="bell" class="text-slate-500"></i>
+            <span class="flex-1 text-left">Notifications</span>
+            <i data-lucide="chevron-right" class="text-slate-400 w-4 h-4"></i>
+          </button>
+          <button class="w-full flex items-center gap-3 p-3 text-sm">
+            <i data-lucide="shield" class="text-slate-500"></i>
+            <span class="flex-1 text-left">Privacy &amp; security</span>
+            <i data-lucide="chevron-right" class="text-slate-400 w-4 h-4"></i>
+          </button>
+          <button class="w-full flex items-center gap-3 p-3 text-sm text-red-600">
+            <i data-lucide="log-out"></i>
+            <span class="flex-1 text-left">Sign out</span>
+          </button>
+        </div>
+
+        <div class="text-center text-[11px] text-slate-400 my-4">Classifly v1.0.0 · Made in India 🇮🇳</div>
+      </div>
+      <div class="phone-nav">
+        <button onclick="goto('mob-home')"><i data-lucide="home"></i><span>Home</span></button>
+        <button onclick="goto('mob-search')"><i data-lucide="search"></i><span>Search</span></button>
+        <span></span>
+        <button onclick="goto('mob-chat')"><i data-lucide="message-circle"></i><span>Chat</span></button>
+        <button class="active"><i data-lucide="user"></i><span>Profile</span></button>
+        <button class="phone-fab" onclick="goto('mob-postad')"><i data-lucide="plus"></i></button>
+      </div>
+    </div></div>
+  </section>
+
+</main>
+
+<!-- ============ NAVIGATION SCRIPT ============ -->
+<script>
+  const screens = {
+    web: [
+      { id:'web-home',     label:'Home' },
+      { id:'web-search',   label:'Search results' },
+      { id:'web-listing',  label:'Listing detail' },
+      { id:'web-postad',   label:'Post-ad wizard' },
+      { id:'web-profile',  label:'My profile' },
+      { id:'web-chat',     label:'Chat' },
+      { id:'web-jobs',     label:'Jobs hub' },
+      { id:'web-services', label:'Services hub' },
+    ],
+    mobile: [
+      { id:'mob-home',    label:'Home' },
+      { id:'mob-search',  label:'Search + filters' },
+      { id:'mob-listing', label:'Listing detail' },
+      { id:'mob-postad',  label:'Post-ad (photos step)' },
+      { id:'mob-chat',    label:'Chat thread' },
+      { id:'mob-profile', label:'Profile' },
+    ]
+  };
+  let mode = 'web';
+  const $ = s => document.querySelector(s);
+
+  function rebuildSelect(){
+    const sel = $('#screenSel');
+    sel.innerHTML = '';
+    screens[mode].forEach(s => {
+      const o = document.createElement('option');
+      o.value = s.id; o.textContent = s.label; sel.appendChild(o);
+    });
+  }
+  function setMode(m){
+    mode = m;
+    $('#modeWeb').classList.toggle('bg-white', m==='web');
+    $('#modeWeb').classList.toggle('text-slate-900', m==='web');
+    $('#modeWeb').classList.toggle('text-slate-300', m!=='web');
+    $('#modeMobile').classList.toggle('bg-white', m==='mobile');
+    $('#modeMobile').classList.toggle('text-slate-900', m==='mobile');
+    $('#modeMobile').classList.toggle('text-slate-300', m!=='mobile');
+    $('#webRoot').style.display    = m==='web'    ? '' : 'none';
+    $('#mobileRoot').style.display = m==='mobile' ? '' : 'none';
+    rebuildSelect();
+    goto(screens[mode][0].id);
+  }
+  function goto(id){
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    const el = document.getElementById(id);
+    if (el) el.classList.add('active');
+    $('#screenSel').value = id;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (window.lucide) lucide.createIcons();
+  }
+  window.goto = goto;
+  $('#modeWeb').addEventListener('click', () => setMode('web'));
+  $('#modeMobile').addEventListener('click', () => setMode('mobile'));
+  $('#screenSel').addEventListener('change', e => goto(e.target.value));
+
+  setMode('web');
+  if (window.lucide) lucide.createIcons();
+</script>
+</body>
+</html>

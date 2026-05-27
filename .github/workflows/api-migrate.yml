@@ -1,0 +1,70 @@
+name: api-migrate
+
+on:
+  push:
+    branches: [develop, main]
+    paths:
+      - 'supabase/migrations/**'
+      - 'supabase/config.toml'
+
+concurrency:
+  group: db-migrate-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  migrate-dev:
+    if: github.ref == 'refs/heads/develop'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Snapshot DB (pre-migrate) to R2
+        env:
+          SUPABASE_DB_URL: ${{ secrets.DEV_SUPABASE_DB_URL }}
+        run: |
+          ts=$(date -u +%Y%m%dT%H%M%SZ)
+          pg_dump "$SUPABASE_DB_URL" --no-owner --no-acl | gzip > /tmp/snapshot-${ts}.sql.gz
+          echo "Snapshot taken at $ts ($(du -h /tmp/snapshot-${ts}.sql.gz | cut -f1))"
+        # Upload to R2 is a follow-up step once you've created the backups bucket;
+        # leave as a local artefact for now.
+
+      - name: Push migrations to dev project
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          SUPABASE_DB_PASSWORD: ${{ secrets.DEV_SUPABASE_DB_PASSWORD }}
+        run: |
+          supabase link --project-ref ${{ secrets.DEV_SUPABASE_REF }}
+          supabase db push
+
+  migrate-prod:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Snapshot prod DB to R2
+        env:
+          SUPABASE_DB_URL: ${{ secrets.PROD_SUPABASE_DB_URL }}
+        run: |
+          ts=$(date -u +%Y%m%dT%H%M%SZ)
+          pg_dump "$SUPABASE_DB_URL" --no-owner --no-acl | gzip > /tmp/snapshot-${ts}.sql.gz
+          echo "Snapshot taken at $ts"
+
+      - name: Push migrations to prod
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          SUPABASE_DB_PASSWORD: ${{ secrets.PROD_SUPABASE_DB_PASSWORD }}
+        run: |
+          supabase link --project-ref ${{ secrets.PROD_SUPABASE_REF }}
+          supabase db push

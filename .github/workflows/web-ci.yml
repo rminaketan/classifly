@@ -1,0 +1,63 @@
+name: web-ci
+
+on:
+  pull_request:
+    paths:
+      - 'apps/web/**'
+      - 'packages/**'
+      - 'pnpm-workspace.yaml'
+      - 'pnpm-lock.yaml'
+  push:
+    branches: [develop, main]
+    paths:
+      - 'apps/web/**'
+      - 'packages/**'
+
+concurrency:
+  group: web-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm --filter web lint
+
+      - name: Type-check
+        run: pnpm --filter web type-check
+
+      - name: Test
+        run: pnpm --filter web test
+
+      - name: Build
+        env:
+          # Stub envs so `next build` succeeds in CI without real Supabase creds.
+          NEXT_PUBLIC_SUPABASE_URL: https://stub.supabase.co
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: stub-anon-key
+        run: pnpm --filter web build
+
+      - name: Deploy preview to Cloudflare Pages
+        if: github.event_name == 'pull_request'
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          accountId: ${{ secrets.CF_ACCOUNT_ID }}
+          projectName: classifly-web
+          directory: apps/web/.next
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}

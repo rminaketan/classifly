@@ -1,0 +1,61 @@
+name: classifly
+description: Classifly.in — India's marketplace, mobile app.
+publish_to: 'none'
+version: 0.1.0+1
+
+environment:
+  sdk: ">=3.4.0 <4.0.0"
+  flutter: ">=3.24.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  # State
+  flutter_riverpod: ^2.5.1
+
+  # Routing
+  go_router: ^14.2.7
+
+  # Network + Supabase
+  supabase_flutter: ^2.5.11
+  dio: ^5.7.0
+
+  # Persistence (offline drafts, cache)
+  drift: ^2.20.3
+  sqlite3_flutter_libs: ^0.5.24
+  path_provider: ^2.1.4
+  path: ^1.9.0
+
+  # Media
+  image_picker: ^1.1.2
+  image: ^4.2.0
+  cached_network_image: ^3.4.1
+
+  # Forms + validation
+  reactive_forms: ^17.0.1
+
+  # Utility
+  intl: ^0.19.0
+  flutter_svg: ^2.0.10+1
+
+  # Push
+  firebase_core: ^3.4.1
+  firebase_messaging: ^15.1.1
+
+  # Observability
+  sentry_flutter: ^8.9.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+  build_runner: ^2.4.13
+  drift_dev: ^2.20.3
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/

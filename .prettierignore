@@ -1,0 +1,10 @@
+node_modules
+.next
+dist
+build
+.turbo
+supabase/.branches
+supabase/.temp
+pnpm-lock.yaml
+*.md
+apps/mobile

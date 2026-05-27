@@ -1,0 +1,160 @@
+{
+  "$comment": "Classifly.in design tokens. Source of truth for Tailwind (web) and Flutter ThemeData (mobile). Numeric scales follow Tailwind conventions for easy adoption.",
+  "colors": {
+    "primary": {
+      "DEFAULT": "#1F3A5F",
+      "50":  "#F0F4F9",
+      "100": "#D9E2EE",
+      "200": "#B3C5DD",
+      "300": "#8DA8CC",
+      "400": "#5C7FAE",
+      "500": "#3D5F8E",
+      "600": "#1F3A5F",
+      "700": "#172E4B",
+      "800": "#0F2138",
+      "900": "#081424"
+    },
+    "accent": {
+      "$comment": "Saffron orange — warm, India-rooted, used sparingly for energy: featured listings, urgent CTAs",
+      "DEFAULT": "#FF6B35",
+      "50":  "#FFF4EF",
+      "100": "#FFE0D2",
+      "300": "#FFA37A",
+      "500": "#FF6B35",
+      "700": "#C24016",
+      "900": "#7A2509"
+    },
+    "success":  { "DEFAULT": "#16A34A", "bg": "#DCFCE7" },
+    "warning":  { "DEFAULT": "#F59E0B", "bg": "#FEF3C7" },
+    "danger":   { "DEFAULT": "#DC2626", "bg": "#FEE2E2" },
+    "info":     { "DEFAULT": "#2563EB", "bg": "#DBEAFE" },
+    "verified": { "DEFAULT": "#0EA5E9" },
+    "neutral": {
+      "0":   "#FFFFFF",
+      "50":  "#F8FAFC",
+      "100": "#F1F5F9",
+      "200": "#E2E8F0",
+      "300": "#CBD5E1",
+      "400": "#94A3B8",
+      "500": "#64748B",
+      "600": "#475569",
+      "700": "#334155",
+      "800": "#1E293B",
+      "900": "#0F172A"
+    }
+  },
+  "fontFamily": {
+    "sans":     ["Inter", "system-ui", "-apple-system", "Segoe UI", "Roboto", "sans-serif"],
+    "devanagari": ["Noto Sans Devanagari", "Inter", "sans-serif"],
+    "tamil":      ["Noto Sans Tamil", "Inter", "sans-serif"],
+    "mono":     ["JetBrains Mono", "ui-monospace", "monospace"]
+  },
+  "fontSize": {
+    "xs":   ["12px", { "lineHeight": "16px" }],
+    "sm":   ["14px", { "lineHeight": "20px" }],
+    "base": ["16px", { "lineHeight": "24px" }],
+    "lg":   ["18px", { "lineHeight": "28px" }],
+    "xl":   ["20px", { "lineHeight": "28px" }],
+    "2xl":  ["24px", { "lineHeight": "32px" }],
+    "3xl":  ["30px", { "lineHeight": "36px" }],
+    "4xl":  ["36px", { "lineHeight": "40px" }],
+    "5xl":  ["48px", { "lineHeight": "1" }]
+  },
+  "spacing": {
+    "0":  "0",
+    "1":  "4px",
+    "2":  "8px",
+    "3":  "12px",
+    "4":  "16px",
+    "5":  "20px",
+    "6":  "24px",
+    "8":  "32px",
+    "10": "40px",
+    "12": "48px",
+    "16": "64px",
+    "20": "80px",
+    "24": "96px"
+  },
+  "borderRadius": {
+    "none": "0",
+    "sm":   "4px",
+    "DEFAULT": "8px",
+    "md":   "10px",
+    "lg":   "12px",
+    "xl":   "16px",
+    "2xl":  "24px",
+    "full": "9999px"
+  },
+  "boxShadow": {
+    "xs":   "0 1px 2px rgba(15, 23, 42, 0.05)",
+    "sm":   "0 2px 6px rgba(15, 23, 42, 0.06)",
+    "md":   "0 6px 16px rgba(15, 23, 42, 0.08)",
+    "lg":   "0 12px 24px rgba(15, 23, 42, 0.10)",
+    "ring": "0 0 0 3px rgba(31, 58, 95, 0.20)"
+  },
+  "motion": {
+    "fast":   "120ms",
+    "normal": "200ms",
+    "slow":   "320ms",
+    "ease":   "cubic-bezier(0.2, 0.0, 0.2, 1)"
+  },
+  "z": {
+    "base":     "0",
+    "dropdown": "100",
+    "sticky":   "200",
+    "overlay":  "300",
+    "modal":    "400",
+    "toast":    "500"
+  },
+  "breakpoints": {
+    "sm": "640px",
+    "md": "768px",
+    "lg": "1024px",
+    "xl": "1280px"
+  },
+  "components": {
+    "$comment": "Component-level tokens — derived values used by the prototype",
+    "card": {
+      "padding": "16px",
+      "radius":  "12px",
+      "border":  "1px solid #E2E8F0",
+      "shadow":  "0 1px 2px rgba(15, 23, 42, 0.05)"
+    },
+    "button": {
+      "primary":   { "bg": "#1F3A5F", "fg": "#FFFFFF", "hover": "#172E4B" },
+      "accent":    { "bg": "#FF6B35", "fg": "#FFFFFF", "hover": "#C24016" },
+      "secondary": { "bg": "#F1F5F9", "fg": "#1F3A5F", "border": "#E2E8F0" },
+      "ghost":     { "bg": "transparent", "fg": "#1F3A5F", "hoverBg": "#F1F5F9" },
+      "destructive": { "bg": "#DC2626", "fg": "#FFFFFF" }
+    },
+    "badge": {
+      "verified":   { "bg": "#E0F2FE", "fg": "#0369A1" },
+      "featured":   { "bg": "#FFE0D2", "fg": "#C24016" },
+      "kyc_tier2":  { "bg": "#DCFCE7", "fg": "#15803D" },
+      "new":        { "bg": "#DBEAFE", "fg": "#1E40AF" }
+    },
+    "chip": {
+      "default":  { "bg": "#F1F5F9", "fg": "#1E293B" },
+      "selected": { "bg": "#1F3A5F", "fg": "#FFFFFF" }
+    }
+  },
+  "iconSet": {
+    "$comment": "We use Lucide for web (lucide-react) and material_symbols_icons for Flutter; names below map across both",
+    "home":     "home",
+    "search":   "search",
+    "sell":     "plus-circle",
+    "chat":     "message-circle",
+    "profile":  "user-circle",
+    "filter":   "sliders-horizontal",
+    "location": "map-pin",
+    "verified": "badge-check",
+    "save":     "bookmark",
+    "share":    "share-2",
+    "report":   "flag",
+    "voice":    "mic",
+    "camera":   "camera",
+    "rupee":    "indian-rupee",
+    "phone":    "phone",
+    "calendar": "calendar"
+  }
+}

@@ -1,0 +1,11 @@
+include: package:flutter_lints/flutter.yaml
+
+linter:
+  rules:
+    - prefer_single_quotes
+    - always_use_package_imports
+    - avoid_print
+    - require_trailing_commas
+    - sort_pub_dependencies
+    - prefer_const_constructors
+    - prefer_const_literals_to_create_immutables

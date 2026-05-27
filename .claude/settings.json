@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls c:/Projects/)",
+      "Read(//c/Projects/**)",
+      "Bash(scoop --version)",
+      "Bash(docker version *)",
+      "Bash(choco --version)",
+      "Bash(pnpm db:start)",
+      "Bash(pnpm exec *)",
+      "Bash(mkdir -p /tmp/sb-init-test)",
+      "Read(//tmp/**)",
+      "Bash(c:/Projects/classifly/node_modules/.bin/supabase init *)",
+      "Bash(docker exec *)",
+      "Bash(pnpm dev *)",
+      "Bash(curl -s -o /tmp/home2.html -w \"HTTP %{http_code}  bytes=%{size_download}\\\\n\" http://localhost:3004/)",
+      "Bash(pnpm type-check *)",
+      "Bash(pnpm --filter web type-check)",
+      "Bash(curl -s -o /tmp/notfound.html -w \"HTTP %{http_code}  bytes=%{size_download}\\\\n\" \"http://localhost:3005/listings/00000000-0000-0000-0000-000000000000\")",
+      "Bash(npm view *)",
+      "Bash(pnpm add *)",
+      "Bash(grep -n -E \"\\(saved_listings|listing_attributes\\):\\\\s*$\" c:/Projects/classifly/packages/db/src/types.ts)",
+      "Bash(pnpm db:types)",
+      "Bash(pnpm lint *)",
+      "Bash(git init *)",
+      "Bash(git add *)"
+    ]
+  }
+}
